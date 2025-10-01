@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use App\Jobs\ProcessQuestion;
+use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Cache;
 
 class QaController extends Controller
