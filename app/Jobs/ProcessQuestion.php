@@ -38,7 +38,7 @@ class ProcessQuestion implements ShouldQueue
             if ($this->filePath) {
                 $command[] = $this->filePath;
             }
-            
+
             $process = new Process($command);
             $process->run();
 
