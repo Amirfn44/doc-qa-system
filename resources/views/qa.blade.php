@@ -9,7 +9,11 @@
 <body>
     <div class="container mt-5">
         <h1>Ask a question</h1>
-        <form id="qa-form">
+        <form id="qa-form" enctype="multipart/form-data">
+            <div class="mb-3">
+                <label for="file" class="form-label">Upload File (Optional)</label>
+                <input class="form-control" type="file" id="file">
+            </div>
             <div class="mb-3">
                 <label for="question" class="form-label">Your Question</label>
                 <textarea class="form-control" id="question" rows="3"></textarea>
@@ -27,16 +31,23 @@
         document.getElementById('qa-form').addEventListener('submit', function (e) {
             e.preventDefault();
             const question = document.getElementById('question').value;
+            const fileInput = document.getElementById('file');
+            const file = fileInput.files[0];
             const answerContent = document.getElementById('answer-content');
             answerContent.innerHTML = 'Sending question...';
+
+            const formData = new FormData();
+            formData.append('question', question);
+            if (file) {
+                formData.append('file', file);
+            }
 
             fetch('/api/ask', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json',
                     'X-CSRF-TOKEN': '{{ csrf_token() }}'
                 },
-                body: JSON.stringify({ question: question })
+                body: formData
             })
             .then(response => response.json())
             .then(data => {

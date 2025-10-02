@@ -6,3 +6,5 @@ langchain-cohere
 tiktoken
 python-dotenv
 langgraph
+pandas
+openpyxl

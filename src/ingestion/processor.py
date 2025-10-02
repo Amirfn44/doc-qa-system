@@ -1,7 +1,7 @@
 import os
 import uuid
 from langchain_core.documents import Document
-from src.ingestion.file_loader import load_pdf, load_docx, load_txt, load_csv, load_image
+from src.ingestion.file_loader import load_pdf, load_docx, load_txt, load_csv, load_image, load_xlsx
 from src.ingestion.chunker import chunk_text
 
 def detect_file_type(file_path):
@@ -14,6 +14,8 @@ def detect_file_type(file_path):
         return "txt"
     elif ext in [".csv"]:
         return "csv"
+    elif ext in [".xlsx"]:
+        return "xlsx"
     elif ext in [".png", ".jpg", ".jpeg", ".tiff", ".bmp"]:
         return "image"
     else:
@@ -29,6 +31,8 @@ def process_file(file_path):
         texts = load_txt(file_path)
     elif file_type == "csv":
         texts = load_csv(file_path)
+    elif file_type == "xlsx":
+        texts = load_xlsx(file_path)
     elif file_type == "image":
         texts = load_image(file_path)
     else:

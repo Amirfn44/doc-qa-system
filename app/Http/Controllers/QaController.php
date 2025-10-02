@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use App\Jobs\ProcessQuestion;
+use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Cache;
 
 class QaController extends Controller
@@ -15,16 +16,24 @@ class QaController extends Controller
     public function ask(Request $request)
     {
         $question = $request->input('question');
+        $filePath = null;
 
         if (!$question) {
             return response()->json(['error' => 'No question provided'], 400);
+        }
+
+        if ($request->hasFile('file')) {
+            $file = $request->file('file');
+            $fileName = $file->getClientOriginalName();
+            $file->move(base_path('data/uploads'), $fileName);
+            $filePath = base_path('data/uploads/' . $fileName);
         }
 
         // Generate a unique key for this query
         $cacheKey = 'query_' . Str::uuid();
 
         // Dispatch the job to the queue
-        ProcessQuestion::dispatch($question, $cacheKey);
+        ProcessQuestion::dispatch($question, $cacheKey, $filePath);
 
         // Immediately return the cache key so the client can poll for the result
         return response()->json([

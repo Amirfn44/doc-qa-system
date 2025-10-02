@@ -12,15 +12,18 @@ if "COHERE_API_KEY" not in os.environ:
     sys.stderr.write("Error: COHERE_API_KEY environment variable not set\n")
     sys.exit(1)
 
-upload_dir = os.path.join(os.getcwd(), "data", "uploads")
-try:
-    files = [os.path.join(upload_dir, f) for f in os.listdir(upload_dir)]
-    if not files:
-        sys.stderr.write("Error: No files found in the uploads directory.\n")
+if len(sys.argv) > 2 and sys.argv[2]:
+    files = [sys.argv[2]]
+else:
+    upload_dir = os.path.join(os.getcwd(), "data", "uploads")
+    try:
+        files = [os.path.join(upload_dir, f) for f in os.listdir(upload_dir)]
+        if not files:
+            sys.stderr.write("Error: No files found in the uploads directory.\n")
+            sys.exit(1)
+    except FileNotFoundError:
+        sys.stderr.write("Error: The specified upload directory does not exist.\n")
         sys.exit(1)
-except FileNotFoundError:
-    sys.stderr.write("Error: The specified upload directory does not exist.\n")
-    sys.exit(1)
 
 all_documents = []
 for file_path in files:

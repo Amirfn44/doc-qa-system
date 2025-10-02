@@ -31,3 +31,11 @@ def load_image(file_path):
     img = Image.open(file_path)
     text = pytesseract.image_to_string(img)
     return [text]
+
+def load_xlsx(file_path):
+    df = pd.read_excel(file_path)
+    texts = []
+    for _, row in df.iterrows():
+        combined = " ".join([f"{col}: {row[col]}" for col in df.columns])
+        texts.append(combined)
+    return texts
