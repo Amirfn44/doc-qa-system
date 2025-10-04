@@ -7,44 +7,120 @@ use Illuminate\Support\Str;
 use App\Jobs\ProcessQuestion;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Cache;
+use App\Models\Chat;
+use App\Models\ChatFile;
+use App\Models\ChatMessage;
 
 class QaController extends Controller
 {
-    /**
-     * Dispatches a job to process a question and returns a query ID.
-     */
-    public function ask(Request $request)
+    public function createChat(Request $request)
+    {
+        $chat = Chat::create([
+            'title' => $request->input('title', 'New Chat')
+        ]);
+
+        return response()->json([
+            'chat_id' => $chat->id,
+            'title' => $chat->title,
+            'created_at' => $chat->created_at
+        ]);
+    }
+
+    public function getChats()
+    {
+        $chats = Chat::with('messages', 'files')
+            ->orderBy('updated_at', 'desc')
+            ->get();
+
+        return response()->json($chats);
+    }
+
+    public function getChat($chatId)
+    {
+        $chat = Chat::with(['messages' => function($query) {
+            $query->orderBy('created_at', 'asc');
+        }, 'files'])->findOrFail($chatId);
+
+        return response()->json($chat);
+    }
+
+    public function deleteChat($chatId)
+    {
+        $chat = Chat::findOrFail($chatId);
+
+        $uploadPath = base_path("data/uploads/{$chatId}");
+        if (is_dir($uploadPath)) {
+            $this->deleteDirectory($uploadPath);
+        }
+
+        $chat->delete();
+
+        return response()->json(['message' => 'Chat deleted successfully']);
+    }
+
+    public function uploadFile(Request $request, $chatId)
+    {
+        $chat = Chat::findOrFail($chatId);
+
+        if (!$request->hasFile('file')) {
+            return response()->json(['error' => 'No file provided'], 400);
+        }
+
+        $file = $request->file('file');
+        $originalName = $file->getClientOriginalName();
+        $filename = time() . '_' . $originalName;
+
+        $uploadPath = base_path("data/uploads/{$chatId}");
+        if (!is_dir($uploadPath)) {
+            mkdir($uploadPath, 0755, true);
+        }
+
+        $file->move($uploadPath, $filename);
+        $filePath = $uploadPath . '/' . $filename;
+
+        ChatFile::create([
+            'chat_id' => $chatId,
+            'filename' => $filename,
+            'original_name' => $originalName,
+            'file_path' => $filePath
+        ]);
+
+        return response()->json([
+            'message' => 'File uploaded successfully',
+            'filename' => $originalName
+        ]);
+    }
+
+    public function ask(Request $request, $chatId)
     {
         $question = $request->input('question');
-        $filePath = null;
 
         if (!$question) {
             return response()->json(['error' => 'No question provided'], 400);
         }
 
-        if ($request->hasFile('file')) {
-            $file = $request->file('file');
-            $fileName = $file->getClientOriginalName();
-            $file->move(base_path('data/uploads'), $fileName);
-            $filePath = base_path('data/uploads/' . $fileName);
-        }
+        $chat = Chat::findOrFail($chatId);
 
-        // Generate a unique key for this query
+        $message = ChatMessage::create([
+            'chat_id' => $chatId,
+            'question' => $question
+        ]);
+
         $cacheKey = 'query_' . Str::uuid();
 
-        // Dispatch the job to the queue
-        ProcessQuestion::dispatch($question, $cacheKey, $filePath);
+        $uploadPath = base_path("data/uploads/{$chatId}");
 
-        // Immediately return the cache key so the client can poll for the result
+        ProcessQuestion::dispatch($question, $cacheKey, $chatId, $uploadPath, $message->id);
+
+        $chat->touch();
+
         return response()->json([
             'message' => 'Your question is being processed.',
-            'query_id' => $cacheKey
+            'query_id' => $cacheKey,
+            'message_id' => $message->id
         ]);
     }
 
-    /**
-     * Checks the status of a processed question by its query ID.
-     */
     public function check(Request $request)
     {
         $queryId = $request->query('query_id');
@@ -53,17 +129,26 @@ class QaController extends Controller
             return response()->json(['error' => 'No query ID provided'], 400);
         }
 
-        // Use Cache::pull() to atomically retrieve the item and remove it.
-        // This prevents a race condition where one request reads the cache
-        // while a second request removes it before the first one can.
         $result = Cache::pull($queryId);
 
         if ($result) {
-            // Result is available, decode and return it.
             return response()->json(json_decode($result, true));
         }
 
-        // Result is not yet available
         return response()->json(['status' => 'processing']);
+    }
+
+    private function deleteDirectory($dir)
+    {
+        if (!is_dir($dir)) {
+            return;
+        }
+
+        $files = array_diff(scandir($dir), ['.', '..']);
+        foreach ($files as $file) {
+            $path = "$dir/$file";
+            is_dir($path) ? $this->deleteDirectory($path) : unlink($path);
+        }
+        rmdir($dir);
     }
 }
