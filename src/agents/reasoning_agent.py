@@ -6,29 +6,48 @@ class ReasoningAgent:
     def __init__(self):
         self.llm = Ollama(model="llama3.2")
         self.prompt = ChatPromptTemplate.from_template(
-            """You are a reasoning agent. You will be given a query and a set of documents.
-            Your task is to answer the query based on the information in the documents.
-            You must cite the sources you use to answer the query.
-            For each sentence in your answer, you must add a citation to the source document.
-            The citation should be the `source_file` from the document's metadata.
-            For example: "This is a sentence from the document. [source_file.pdf]"
+            """You are an intelligent assistant helping users understand their documents.
 
-            Query: {query}
-            Documents: {documents}
+You will be given a query and relevant excerpts from documents. Your task is to:
+1. Analyze all the provided document excerpts carefully
+2. Synthesize the information to provide a comprehensive, natural answer
+3. Write in a clear, conversational style
+4. Do NOT include inline citations like [filename.pdf] in your response
+5. Simply provide the answer based on the documents
 
-            Chain of Thought:
-            ...
+Query: {query}
 
-            Final Answer with Citations:"""
+Relevant Document Excerpts:
+{documents}
+
+Instructions:
+- Provide a clear, direct answer to the query
+- Use information from ALL relevant documents
+- Write naturally without mentioning source files in the text
+- Be concise but thorough
+- If the documents don't contain enough information, say so
+
+Your Answer:"""
         )
         self.chain = self.prompt | self.llm
 
     def reason(self, state: AgentState):
         query = state["query"]
         documents = state["documents"]
-        response = self.chain.invoke({"query": query, "documents": documents})
 
+        doc_texts = []
+        for i, doc in enumerate(documents, 1):
+            doc_texts.append(f"Document {i}:\n{doc.page_content}\n")
 
-        citations = [doc.metadata["source_file"] for doc in documents if doc.metadata["source_file"] in response]
-        answer = response 
+        formatted_docs = "\n".join(doc_texts)
+
+        response = self.chain.invoke({
+            "query": query,
+            "documents": formatted_docs
+        })
+
+        citations = list(set([doc.metadata["source_file"] for doc in documents]))
+
+        answer = response.strip()
+
         return {"answer": answer, "citations": citations}
