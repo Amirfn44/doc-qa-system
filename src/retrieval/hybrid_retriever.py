@@ -15,19 +15,22 @@ class HybridRetriever:
         )
         self.reranker = CohereRerank(model="rerank-english-v3.0")
 
-    def retrieve(self, query: str, k: int = 8):
+    def retrieve(self, query: str, k: int = 12):
         """
         Retrieve relevant documents using hybrid search.
 
         Args:
             query: The search query
-            k: Number of top documents to return after reranking (default 8 for better coverage)
+            k: Number of top documents to return after reranking (default 12 for better coverage of multi-part questions)
 
         Returns:
             List of top-k reranked documents
         """
+        # Get initial candidates from ensemble retriever
         docs = self.ensemble_retriever.invoke(query)
 
+        # Rerank using Cohere
         reranked_docs = self.reranker.compress_documents(documents=docs, query=query)
 
+        # Return top k documents
         return reranked_docs[:k]
