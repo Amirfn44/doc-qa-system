@@ -26,6 +26,21 @@ class QaController extends Controller
         ]);
     }
 
+    public function updateChatTitle(Request $request, $chatId)
+    {
+        $request->validate([
+            'title' => 'required|string|max:255'
+        ]);
+
+        $chat = Chat::findOrFail($chatId);
+        $chat->update(['title' => $request->input('title')]);
+
+        return response()->json([
+            'message' => 'Chat title updated successfully',
+            'title' => $chat->title
+        ]);
+    }
+
     public function getChats()
     {
         $chats = Chat::with('messages', 'files')
@@ -56,6 +71,77 @@ class QaController extends Controller
         $chat->delete();
 
         return response()->json(['message' => 'Chat deleted successfully']);
+    }
+
+    public function deleteFile($chatId, $fileId)
+    {
+        $file = ChatFile::where('chat_id', $chatId)->findOrFail($fileId);
+
+        if (file_exists($file->file_path)) {
+            unlink($file->file_path);
+        }
+
+        $file->delete();
+
+        return response()->json(['message' => 'File deleted successfully']);
+    }
+
+    public function editMessage(Request $request, $chatId, $messageId)
+    {
+        $request->validate([
+            'question' => 'required|string'
+        ]);
+
+        $message = ChatMessage::where('chat_id', $chatId)->findOrFail($messageId);
+
+        $message->update([
+            'question' => $request->input('question'),
+            'answer' => null,
+            'citations' => null
+        ]);
+
+        $cacheKey = 'query_' . Str::uuid();
+
+        $uploadPath = base_path("data/uploads/{$chatId}");
+
+        ProcessQuestion::dispatch($request->input('question'), $cacheKey, $chatId, $uploadPath, $message->id);
+
+        $chat = Chat::findOrFail($chatId);
+        $chat->touch();
+
+        return response()->json([
+            'message' => 'Question updated and reprocessing',
+            'query_id' => $cacheKey,
+            'message_id' => $message->id
+        ]);
+    }
+
+    public function getFileContent(Request $request, $chatId)
+    {
+        $filename = $request->query('filename');
+
+        if (!$filename) {
+            return response()->json(['error' => 'Filename required'], 400);
+        }
+
+        $file = ChatFile::where('chat_id', $chatId)
+                        ->where('original_name', $filename)
+                        ->first();
+
+        if (!$file) {
+            return response()->json(['error' => 'File not found'], 404);
+        }
+
+        if (!file_exists($file->file_path)) {
+            return response()->json(['error' => 'File not found on disk'], 404);
+        }
+
+        $content = file_get_contents($file->file_path);
+
+        return response()->json([
+            'filename' => $file->original_name,
+            'content' => $content
+        ]);
     }
 
     public function uploadFile(Request $request, $chatId)

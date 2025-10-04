@@ -25,7 +25,6 @@
             height: 100vh;
         }
 
-        /* Sidebar */
         .sidebar {
             width: 280px;
             background: #111;
@@ -71,6 +70,9 @@
             cursor: pointer;
             transition: all 0.2s;
             position: relative;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
         .chat-item:hover {
@@ -82,6 +84,11 @@
             background: #fff;
             color: #000;
             border-color: #fff;
+        }
+
+        .chat-info {
+            flex: 1;
+            min-width: 0;
         }
 
         .chat-title {
@@ -98,29 +105,40 @@
             opacity: 0.6;
         }
 
-        .delete-chat {
-            position: absolute;
-            right: 10px;
-            top: 50%;
-            transform: translateY(-50%);
+        .chat-actions {
+            display: flex;
+            gap: 4px;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .chat-item:hover .chat-actions {
+            opacity: 1;
+        }
+
+        .chat-action-btn {
             background: transparent;
             border: none;
             color: inherit;
             cursor: pointer;
             padding: 4px;
-            opacity: 0;
-            transition: opacity 0.2s;
-        }
-
-        .chat-item:hover .delete-chat {
             opacity: 0.6;
+            transition: opacity 0.2s;
+            font-size: 14px;
         }
 
-        .delete-chat:hover {
-            opacity: 1 !important;
+        .chat-action-btn:hover {
+            opacity: 1;
         }
 
-        /* Main content */
+        .chat-item.active .chat-action-btn {
+            opacity: 0.7;
+        }
+
+        .chat-item.active .chat-action-btn:hover {
+            opacity: 1;
+        }
+
         .main-content {
             flex: 1;
             display: flex;
@@ -131,11 +149,123 @@
             padding: 20px 30px;
             border-bottom: 1px solid #333;
             background: #111;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .chat-header-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex: 1;
+            min-width: 0;
         }
 
         .chat-header h1 {
             font-size: 20px;
             font-weight: 600;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .rename-btn {
+            background: transparent;
+            border: none;
+            color: #fff;
+            cursor: pointer;
+            padding: 6px;
+            opacity: 0.5;
+            transition: opacity 0.2s;
+            font-size: 16px;
+        }
+
+        .rename-btn:hover {
+            opacity: 1;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: #111;
+            border: 1px solid #333;
+            border-radius: 12px;
+            padding: 24px;
+            width: 90%;
+            max-width: 400px;
+        }
+
+        .modal-header {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .modal-input {
+            width: 100%;
+            padding: 12px;
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 6px;
+            color: #fff;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        .modal-input:focus {
+            outline: none;
+            border-color: #fff;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+        }
+
+        .modal-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .modal-btn-cancel {
+            background: #1a1a1a;
+            color: #fff;
+            border: 1px solid #333;
+        }
+
+        .modal-btn-cancel:hover {
+            background: #222;
+        }
+
+        .modal-btn-save {
+            background: #fff;
+            color: #000;
+        }
+
+        .modal-btn-save:hover {
+            background: #e0e0e0;
         }
 
         .messages-container {
@@ -161,7 +291,7 @@
         .message-content {
             padding: 16px 20px;
             border-radius: 8px;
-            line-height: 1.6;
+            line-height: 1.8;
         }
 
         .question {
@@ -173,6 +303,14 @@
             background: #fff;
             color: #000;
             border: 1px solid #fff;
+        }
+
+        .answer p {
+            margin-bottom: 12px;
+        }
+
+        .answer p:last-child {
+            margin-bottom: 0;
         }
 
         .sources-section {
@@ -211,7 +349,6 @@
             font-style: italic;
         }
 
-        /* Input area */
         .input-area {
             padding: 20px 30px;
             border-top: 1px solid #333;
@@ -264,17 +401,114 @@
             gap: 8px;
         }
 
-        .file-tag button {
+        .file-tag-remove {
             background: none;
             border: none;
             color: #fff;
             cursor: pointer;
             padding: 0;
             opacity: 0.6;
+            font-size: 14px;
         }
 
-        .file-tag button:hover {
+        .file-tag-remove:hover {
             opacity: 1;
+        }
+
+        .message-actions {
+            margin-top: 8px;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .message:hover .message-actions {
+            opacity: 1;
+        }
+
+        .message-action-btn {
+            background: transparent;
+            border: 1px solid #333;
+            color: #fff;
+            cursor: pointer;
+            padding: 4px 10px;
+            font-size: 11px;
+            border-radius: 4px;
+            margin-right: 6px;
+            transition: all 0.2s;
+        }
+
+        .message-action-btn:hover {
+            background: #222;
+            border-color: #555;
+        }
+
+        .question .message-action-btn {
+            color: #fff;
+            border-color: #444;
+        }
+
+        .question .message-action-btn:hover {
+            background: #333;
+            border-color: #666;
+        }
+
+        .edit-mode {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .edit-input {
+            flex: 1;
+            padding: 10px;
+            background: #222;
+            border: 1px solid #555;
+            border-radius: 6px;
+            color: #fff;
+            font-size: 14px;
+            font-family: inherit;
+            resize: vertical;
+            min-height: 60px;
+        }
+
+        .edit-input:focus {
+            outline: none;
+            border-color: #fff;
+        }
+
+        .edit-actions {
+            display: flex;
+            gap: 6px;
+            align-items: flex-start;
+        }
+
+        .edit-btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .edit-btn-save {
+            background: #fff;
+            color: #000;
+        }
+
+        .edit-btn-save:hover {
+            background: #e0e0e0;
+        }
+
+        .edit-btn-cancel {
+            background: #1a1a1a;
+            color: #fff;
+            border: 1px solid #333;
+        }
+
+        .edit-btn-cancel:hover {
+            background: #222;
         }
 
         .input-wrapper {
@@ -358,20 +592,19 @@
 </head>
 <body>
     <div class="container">
-        <!-- Sidebar -->
         <div class="sidebar">
             <div class="sidebar-header">
                 <button class="new-chat-btn" onclick="createNewChat()">+ New Chat</button>
             </div>
-            <div class="chats-list" id="chats-list">
-                <!-- Chats will be loaded here -->
-            </div>
+            <div class="chats-list" id="chats-list"></div>
         </div>
 
-        <!-- Main Content -->
         <div class="main-content">
             <div class="chat-header">
-                <h1 id="chat-title">Select or create a chat</h1>
+                <div class="chat-header-left">
+                    <h1 id="chat-title">Select or create a chat</h1>
+                    <button class="rename-btn" id="rename-btn" onclick="openRenameModal()" style="display: none;" title="Rename chat">✏️</button>
+                </div>
             </div>
 
             <div class="messages-container" id="messages-container">
@@ -384,24 +617,27 @@
             <div class="input-area" id="input-area" style="display: none;">
                 <div class="file-upload-area">
                     <div class="file-input-wrapper">
-                        <label class="file-input-label" for="file-input">
-                            📎 Upload File
-                        </label>
+                        <label class="file-input-label" for="file-input">📎 Upload File</label>
                         <input type="file" id="file-input" class="file-input" onchange="uploadFile()">
                     </div>
                     <div class="uploaded-files" id="uploaded-files"></div>
                 </div>
 
                 <div class="input-wrapper">
-                    <textarea
-                        id="question-input"
-                        class="question-input"
-                        rows="3"
-                        placeholder="Ask a question about your documents..."
-                        onkeydown="handleKeyPress(event)"
-                    ></textarea>
+                    <textarea id="question-input" class="question-input" rows="3" placeholder="Ask a question about your documents..." onkeydown="handleKeyPress(event)"></textarea>
                     <button class="send-btn" onclick="askQuestion()">Send</button>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="rename-modal" onclick="if(event.target === this) closeRenameModal()">
+        <div class="modal-content">
+            <div class="modal-header">Rename Chat</div>
+            <input type="text" id="rename-input" class="modal-input" placeholder="Enter chat name..." maxlength="100">
+            <div class="modal-actions">
+                <button class="modal-btn modal-btn-cancel" onclick="closeRenameModal()">Cancel</button>
+                <button class="modal-btn modal-btn-save" onclick="saveChatTitle()">Save</button>
             </div>
         </div>
     </div>
@@ -410,7 +646,6 @@
         let currentChatId = null;
         let pollingInterval = null;
 
-        // Load chats on page load
         window.addEventListener('DOMContentLoaded', loadChats);
 
         async function loadChats() {
@@ -433,9 +668,14 @@
 
             chatsList.innerHTML = chats.map(chat => `
                 <div class="chat-item ${chat.id === currentChatId ? 'active' : ''}" onclick="selectChat(${chat.id})">
-                    <div class="chat-title">${chat.title || 'New Chat'}</div>
-                    <div class="chat-date">${formatDate(chat.updated_at)}</div>
-                    <button class="delete-chat" onclick="event.stopPropagation(); deleteChat(${chat.id})">🗑️</button>
+                    <div class="chat-info">
+                        <div class="chat-title">${escapeHtml(chat.title || 'New Chat')}</div>
+                        <div class="chat-date">${formatDate(chat.updated_at)}</div>
+                    </div>
+                    <div class="chat-actions">
+                        <button class="chat-action-btn" onclick="event.stopPropagation(); openRenameModalForChat(${chat.id}, '${escapeHtml(chat.title)}')" title="Rename">✏️</button>
+                        <button class="chat-action-btn" onclick="event.stopPropagation(); deleteChat(${chat.id})" title="Delete">🗑️</button>
+                    </div>
                 </div>
             `).join('');
         }
@@ -466,6 +706,7 @@
                 const chat = await response.json();
 
                 document.getElementById('chat-title').textContent = chat.title || 'Chat';
+                document.getElementById('rename-btn').style.display = 'block';
                 document.getElementById('input-area').style.display = 'block';
 
                 renderMessages(chat.messages);
@@ -488,33 +729,37 @@
                 let answerHtml = '';
 
                 if (msg.answer) {
-                    // Clean up the answer text
-                    let cleanAnswer = msg.answer
-                        .replace(/\[.*?\]/g, '') // Remove citation markers like [file.txt]
-                        .trim();
+                    let cleanAnswer = msg.answer.replace(/\s*\[.*?\]\s*/g, ' ').replace(/\s+/g, ' ').trim();
 
                     answerHtml = `
                         <div class="message">
                             <div class="message-label">Assistant</div>
                             <div class="message-content answer">
-                                ${cleanAnswer.replace(/\n/g, '<br>')}
+                                <div>${cleanAnswer.replace(/\n\n/g, '</div><div style="margin-top: 12px;">').replace(/\n/g, '<br>')}</div>
                                 ${msg.citations && msg.citations.length > 0 ? `
-                                    <div class="citations">
-                                        <div class="citations-label">Sources:</div>
-                                        ${msg.citations.map(c => `<span class="citation-item">${c}</span>`).join('')}
+                                    <div class="sources-section">
+                                        <div class="sources-title">📚 Sources</div>
+                                        <div>
+                                            ${msg.citations.map(c => `<span class="source-item"><span class="source-icon">📄</span><span>${c}</span></span>`).join('')}
+                                        </div>
                                     </div>
                                 ` : ''}
                             </div>
                         </div>
                     `;
                 } else {
-                    answerHtml = '<div class="message"><div class="message-content answer loading">Processing...</div></div>';
+                    answerHtml = '<div class="message"><div class="message-content answer loading">Processing your question...</div></div>';
                 }
 
                 return `
-                    <div class="message">
+                    <div class="message" id="message-${msg.id}">
                         <div class="message-label">You</div>
-                        <div class="message-content question">${msg.question}</div>
+                        <div class="message-content question">
+                            <div class="question-text" id="question-text-${msg.id}">${escapeHtml(msg.question)}</div>
+                            <div class="message-actions">
+                                <button class="message-action-btn" onclick="editMessage(${msg.id}, '${escapeHtml(msg.question).replace(/'/g, "\\'")}')">✏️ Edit</button>
+                            </div>
+                        </div>
                     </div>
                     ${answerHtml}
                 `;
@@ -527,7 +772,8 @@
             const container = document.getElementById('uploaded-files');
             container.innerHTML = files.map(f => `
                 <div class="file-tag">
-                    📄 ${f.original_name}
+                    📄 ${escapeHtml(f.original_name)}
+                    <button class="file-tag-remove" onclick="deleteFile(${f.id})" title="Remove file">✕</button>
                 </div>
             `).join('');
         }
@@ -621,7 +867,6 @@
                     const data = await response.json();
 
                     if (data.status === 'processing') {
-                        // Still processing
                     } else if (data.status === 'error') {
                         clearInterval(pollingInterval);
                         pollingInterval = null;
@@ -660,6 +905,7 @@
                     if (currentChatId === chatId) {
                         currentChatId = null;
                         document.getElementById('chat-title').textContent = 'Select or create a chat';
+                        document.getElementById('rename-btn').style.display = 'none';
                         document.getElementById('input-area').style.display = 'none';
                         document.getElementById('messages-container').innerHTML = '<div class="empty-state"><h2>Welcome to Doc Q&A</h2><p>Create a new chat or select an existing one to get started</p></div>';
                     }
@@ -671,6 +917,68 @@
                 console.error('Error deleting chat:', error);
                 alert('Error deleting chat');
             }
+        }
+
+        function openRenameModal() {
+            if (!currentChatId) return;
+
+            const currentTitle = document.getElementById('chat-title').textContent;
+            document.getElementById('rename-input').value = currentTitle;
+            document.getElementById('rename-modal').classList.add('active');
+            document.getElementById('rename-input').focus();
+        }
+
+        function openRenameModalForChat(chatId, title) {
+            selectChat(chatId);
+            setTimeout(() => {
+                document.getElementById('rename-input').value = title;
+                document.getElementById('rename-modal').classList.add('active');
+                document.getElementById('rename-input').focus();
+            }, 100);
+        }
+
+        function closeRenameModal() {
+            document.getElementById('rename-modal').classList.remove('active');
+            document.getElementById('rename-input').value = '';
+        }
+
+        async function saveChatTitle() {
+            if (!currentChatId) return;
+
+            const newTitle = document.getElementById('rename-input').value.trim();
+
+            if (!newTitle) {
+                alert('Please enter a chat name');
+                return;
+            }
+
+            try {
+                const response = await fetch(`/api/chats/${currentChatId}/title`, {
+                    method: 'PATCH',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                    },
+                    body: JSON.stringify({ title: newTitle })
+                });
+
+                if (response.ok) {
+                    document.getElementById('chat-title').textContent = newTitle;
+                    closeRenameModal();
+                    await loadChats();
+                } else {
+                    alert('Error updating chat title');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error updating chat title');
+            }
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
         }
 
         function handleKeyPress(event) {
@@ -694,6 +1002,108 @@
             if (diffDays < 7) return `${diffDays}d ago`;
 
             return date.toLocaleDateString();
+        }
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeRenameModal();
+            }
+        });
+
+        document.getElementById('rename-input').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                saveChatTitle();
+            }
+        });
+
+        async function deleteFile(fileId) {
+            if (!currentChatId) return;
+
+            if (!confirm('Are you sure you want to delete this file?')) {
+                return;
+            }
+
+            try {
+                const response = await fetch(`/api/chats/${currentChatId}/files/${fileId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                    }
+                });
+
+                if (response.ok) {
+                    await selectChat(currentChatId);
+                } else {
+                    alert('Error deleting file');
+                }
+            } catch (error) {
+                console.error('Error deleting file:', error);
+                alert('Error deleting file');
+            }
+        }
+
+        function editMessage(messageId, currentQuestion) {
+            const messageEl = document.getElementById(`message-${messageId}`);
+            const questionTextEl = document.getElementById(`question-text-${messageId}`);
+
+            const editHtml = `
+                <div class="edit-mode">
+                    <textarea class="edit-input" id="edit-input-${messageId}">${currentQuestion}</textarea>
+                    <div class="edit-actions">
+                        <button class="edit-btn edit-btn-save" onclick="saveEditedMessage(${messageId})">Save</button>
+                        <button class="edit-btn edit-btn-cancel" onclick="cancelEditMessage(${messageId}, '${currentQuestion.replace(/'/g, "\\'")}')">Cancel</button>
+                    </div>
+                </div>
+            `;
+
+            questionTextEl.parentElement.innerHTML = editHtml;
+            document.getElementById(`edit-input-${messageId}`).focus();
+        }
+
+        function cancelEditMessage(messageId, originalQuestion) {
+            const messageEl = document.getElementById(`message-${messageId}`);
+            const questionContent = messageEl.querySelector('.question');
+
+            questionContent.innerHTML = `
+                <div class="question-text" id="question-text-${messageId}">${escapeHtml(originalQuestion)}</div>
+                <div class="message-actions">
+                    <button class="message-action-btn" onclick="editMessage(${messageId}, '${originalQuestion.replace(/'/g, "\\'")}')">✏️ Edit</button>
+                </div>
+            `;
+        }
+
+        async function saveEditedMessage(messageId) {
+            if (!currentChatId) return;
+
+            const editedQuestion = document.getElementById(`edit-input-${messageId}`).value.trim();
+
+            if (!editedQuestion) {
+                alert('Question cannot be empty');
+                return;
+            }
+
+            try {
+                const response = await fetch(`/api/chats/${currentChatId}/messages/${messageId}`, {
+                    method: 'PATCH',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                    },
+                    body: JSON.stringify({ question: editedQuestion })
+                });
+
+                const data = await response.json();
+
+                if (data.query_id) {
+                    await selectChat(currentChatId);
+                    pollForAnswer(data.query_id);
+                } else {
+                    alert('Error updating message');
+                }
+            } catch (error) {
+                console.error('Error updating message:', error);
+                alert('Error updating message');
+            }
         }
     </script>
 </body>
