@@ -1,6 +1,7 @@
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_ollama.llms import OllamaLLM as Ollama
 from src.graph.state import AgentState
+from src.utils.rate_limiter import OLLAMA_LIMITER
 
 class ReasoningAgent:
     def __init__(self):
@@ -37,20 +38,17 @@ Your Complete Answer:"""
         query = state["query"]
         documents = state["documents"]
 
-        # Format documents for the prompt
         doc_texts = []
         for i, doc in enumerate(documents, 1):
             doc_texts.append(f"Document {i}:\n{doc.page_content}\n")
 
         formatted_docs = "\n".join(doc_texts)
 
-        # Get response from LLM
-        response = self.chain.invoke({
-            "query": query,
-            "documents": formatted_docs
-        })
+        response = OLLAMA_LIMITER.call_with_retry(
+            self.chain.invoke,
+            {"query": query, "documents": formatted_docs}
+        )
 
-        # Extract unique source files from documents
         citations = list(set([doc.metadata["source_file"] for doc in documents]))
 
         answer = response.strip()
