@@ -499,26 +499,38 @@ doc-qa-system/
 │   └── web.php                       # Web routes
 ├── src/                              # Python source
 │   ├── agents/                       # LangChain agents
-│   │   ├── reasoning_agent.py       # Answer generation
 │   │   ├── clarification_agent.py   # Clarification prompts
+│   │   ├── reasoning_agent.py       # Answer generation
+│   │   ├── retriever_agent.py       # Document retrieval agent
 │   │   └── utility_agent.py         # Utility functions
 │   ├── graph/
-│   │   ├── state.py                 # Agent state
+│   │   ├── state.py                 # Agent state definition
 │   │   └── workflow.py              # LangGraph workflow
 │   ├── ingestion/
 │   │   ├── chunker.py               # Text chunking
-│   │   ├── file_loader.py           # File loaders
+│   │   ├── file_loader.py           # File loaders (PDF, DOCX, etc)
 │   │   └── processor.py             # Document processing
+│   ├── llm/
+│   │   └── qa_chain.py              # Q&A chain (legacy)
 │   ├── retrieval/
-│   │   └── advanced_hybrid_retriever.py  # RRF + MMR + Reranking
+│   │   ├── advanced_hybrid_retriever.py  # RRF + MMR + Reranking
+│   │   └── hybrid_retriever.py      # Basic hybrid retriever
 │   ├── utils/
-│   │   └── rate_limiter.py          # Rate limiting
+│   │   ├── file_utils.py            # File utility functions
+│   │   ├── ocr.py                   # OCR utilities
+│   │   └── rate_limiter.py          # Rate limiting with retry
 │   └── vectorstore/
-│       └── store.py                 # Vector database
+│       └── store.py                 # Vector database operations
 ├── data/
-│   └── uploads/                     # Uploaded files (by chat_id)
+│   └── uploads/                     # Uploaded files (organized by chat_id)
+│       ├── 1/                       # Chat 1 files
+│       ├── 2/                       # Chat 2 files
+│       └── .../
 ├── db/
-│   └── chroma/                      # Vector databases (by chat_id)
+│   └── chroma/                      # Vector databases (organized by chat_id)
+│       ├── 1/                       # Chat 1 vector DB
+│       ├── 2/                       # Chat 2 vector DB
+│       └── .../
 ├── main.py                          # Python entry point
 ├── requirements.txt                 # Python dependencies
 ├── ruff.toml                        # Code formatting config
