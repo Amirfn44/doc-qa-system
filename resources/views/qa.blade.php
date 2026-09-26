@@ -874,6 +874,59 @@
             .source-excerpt { max-width: 260px; }
             .file-viewer-content { width: 96%; height: 82vh; }
         }
+
+        /* Aurora workspace theme */
+        :root {
+            --ink: #f6f7fb;
+            --muted: #9ba3b5;
+            --panel: rgba(19, 24, 38, .82);
+            --panel-soft: rgba(255, 255, 255, .055);
+            --line: rgba(255, 255, 255, .1);
+            --accent: #a78bfa;
+            --accent-2: #67e8f9;
+            --shadow: 0 24px 80px rgba(0, 0, 0, .32);
+        }
+
+        body {
+            background:
+                radial-gradient(circle at 12% 8%, rgba(167, 139, 250, .16), transparent 28%),
+                radial-gradient(circle at 88% 92%, rgba(103, 232, 249, .1), transparent 30%),
+                #080b13;
+            color: var(--ink);
+            font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        }
+
+        .sidebar, .chat-header, .input-area {
+            background: var(--panel);
+            border-color: var(--line);
+            backdrop-filter: blur(22px);
+        }
+
+        .sidebar { box-shadow: 16px 0 60px rgba(0, 0, 0, .18); }
+        .new-chat-btn, .send-btn {
+            background: linear-gradient(135deg, var(--accent), var(--accent-2));
+            color: #0b0d16;
+            border-radius: 12px;
+            box-shadow: 0 10px 28px rgba(167, 139, 250, .2);
+        }
+        .new-chat-btn:hover, .send-btn:hover { box-shadow: 0 14px 36px rgba(103, 232, 249, .24); }
+        .chat-item { background: var(--panel-soft); border-color: var(--line); }
+        .chat-item.active { background: linear-gradient(135deg, rgba(167, 139, 250, .95), rgba(103, 232, 249, .9)); color: #0b0d16; }
+        .messages-container { background: transparent; }
+        .message-content { border-radius: 18px; border-color: var(--line); }
+        .question { background: rgba(255, 255, 255, .045); }
+        .answer { background: rgba(246, 247, 251, .96); box-shadow: var(--shadow); }
+        .question-input { background: rgba(255, 255, 255, .06); border-color: var(--line); border-radius: 14px; }
+        .question-input:focus { border-color: var(--accent); box-shadow: 0 0 0 4px rgba(167, 139, 250, .14); }
+        .file-input-label, .file-tag, .rename-btn, .chat-action-btn { border-color: var(--line); background: rgba(255, 255, 255, .05); }
+        .source-item { border-color: rgba(0, 0, 0, .08); border-radius: 12px; }
+        .source-excerpt { color: #596174; }
+        [data-lucide] { width: 16px; height: 16px; vertical-align: -3px; stroke-width: 2; }
+        button, label, .chat-item, .source-item { transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease, background .2s ease; }
+        button:focus-visible, textarea:focus-visible, input:focus-visible { outline: 2px solid var(--accent-2); outline-offset: 3px; }
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
+        }
     </style>
 </head>
 <body>
