@@ -13,6 +13,7 @@ Route::delete('/chats/{chatId}', [QaController::class, 'deleteChat']);
 Route::post('/chats/{chatId}/upload', [QaController::class, 'uploadFile']);
 Route::delete('/chats/{chatId}/files/{fileId}', [QaController::class, 'deleteFile']);
 Route::get('/chats/{chatId}/files/content', [QaController::class, 'getFileContent']);
+Route::get('/chats/{chatId}/files/{fileId}/download', [QaController::class, 'downloadFile']);
 
 Route::post('/chats/{chatId}/ask', [QaController::class, 'ask']);
 Route::patch('/chats/{chatId}/messages/{messageId}', [QaController::class, 'editMessage']);

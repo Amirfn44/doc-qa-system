@@ -136,12 +136,35 @@ class QaController extends Controller
             return response()->json(['error' => 'File not found on disk'], 404);
         }
 
+        $extension = strtolower(pathinfo($file->original_name, PATHINFO_EXTENSION));
+        $previewable = in_array($extension, ['txt', 'csv'], true);
+
+        if (!$previewable) {
+            return response()->json([
+                'filename' => $file->original_name,
+                'previewable' => false,
+                'download_url' => url("/api/chats/{$chatId}/files/{$file->id}/download"),
+            ]);
+        }
+
         $content = file_get_contents($file->file_path);
 
         return response()->json([
             'filename' => $file->original_name,
+            'previewable' => true,
             'content' => $content
         ]);
+    }
+
+    public function downloadFile($chatId, $fileId)
+    {
+        $file = ChatFile::where('chat_id', $chatId)->findOrFail($fileId);
+
+        if (!is_file($file->file_path)) {
+            return response()->json(['error' => 'File not found on disk'], 404);
+        }
+
+        return response()->download($file->file_path, $file->original_name);
     }
 
     public function uploadFile(Request $request, $chatId)

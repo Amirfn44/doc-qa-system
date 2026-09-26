@@ -1382,6 +1382,10 @@
                 }
 
                 const data = await response.json();
+                if (data.previewable === false) {
+                    window.open(data.download_url, '_blank', 'noopener,noreferrer');
+                    return;
+                }
                 const chatResponse = await fetch(`/api/chats/${currentChatId}`);
                 const chat = await chatResponse.json();
                 const message = chat.messages.find(m => m.id === messageId);
