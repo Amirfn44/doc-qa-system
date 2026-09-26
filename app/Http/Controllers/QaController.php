@@ -7,12 +7,58 @@ use Illuminate\Support\Str;
 use App\Jobs\ProcessQuestion;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use App\Models\User;
 use App\Models\Chat;
 use App\Models\ChatFile;
 use App\Models\ChatMessage;
 
 class QaController extends Controller
 {
+    public function register(Request $request)
+    {
+        $data = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|max:255|unique:users,email',
+            'password' => 'required|string|min:8|confirmed',
+        ]);
+
+        $user = User::create($data);
+        Auth::login($user);
+        $request->session()->regenerate();
+
+        return response()->json(['user' => $user], 201);
+    }
+
+    public function login(Request $request)
+    {
+        $credentials = $request->validate([
+            'email' => 'required|email',
+            'password' => 'required|string',
+        ]);
+
+        if (!Auth::attempt($credentials)) {
+            return response()->json(['message' => 'Invalid credentials'], 422);
+        }
+
+        $request->session()->regenerate();
+        return response()->json(['user' => $request->user()]);
+    }
+
+    public function logout(Request $request)
+    {
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+        return response()->json(['message' => 'Logged out']);
+    }
+
+    public function me(Request $request)
+    {
+        return response()->json(['user' => $request->user()]);
+    }
+
     public function createChat(Request $request)
     {
         $chat = Chat::create([

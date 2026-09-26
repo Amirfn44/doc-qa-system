@@ -4,6 +4,11 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\QaController;
 
+Route::post('/auth/register', [QaController::class, 'register']);
+Route::post('/auth/login', [QaController::class, 'login']);
+Route::post('/auth/logout', [QaController::class, 'logout']);
+Route::get('/auth/me', [QaController::class, 'me']);
+
 Route::post('/chats', [QaController::class, 'createChat']);
 Route::get('/chats', [QaController::class, 'getChats']);
 Route::get('/chats/{chatId}', [QaController::class, 'getChat']);
