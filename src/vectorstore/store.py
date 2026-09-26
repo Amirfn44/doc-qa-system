@@ -2,13 +2,14 @@ from langchain_ollama import OllamaEmbeddings
 from langchain_chroma import Chroma
 import os
 import shutil
+from src.llm.config import EMBEDDING_MODEL
 
 def build_vector_store(documents, db_location="./db/chroma"):
     """
     Build a vector store from documents.
     Always rebuilds the store to ensure fresh data.
     """
-    embeddings = OllamaEmbeddings(model="mxbai-embed-large")
+    embeddings = OllamaEmbeddings(model=EMBEDDING_MODEL)
 
     os.makedirs(db_location, exist_ok=True)
 

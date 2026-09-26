@@ -207,6 +207,10 @@ QUEUE_CONNECTION=database
 # API Keys
 COHERE_API_KEY=your_cohere_api_key
 
+# Ollama models (change without editing source code)
+OLLAMA_CHAT_MODEL=llama3.2
+OLLAMA_EMBEDDING_MODEL=mxbai-embed-large
+
 # Python Path (update for your system)
 PYTHON_EXECUTABLE=C:\Users\YourName\AppData\Local\Programs\Python\Python312\python.exe
 

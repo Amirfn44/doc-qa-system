@@ -2,10 +2,11 @@ from langchain_core.prompts import ChatPromptTemplate
 from langchain_ollama.llms import OllamaLLM as Ollama
 from src.graph.state import AgentState
 from src.utils.rate_limiter import OLLAMA_LIMITER
+from src.llm.config import CHAT_MODEL
 
 class ReasoningAgent:
     def __init__(self):
-        self.llm = Ollama(model="llama3.2")
+        self.llm = Ollama(model=CHAT_MODEL)
         self.prompt = ChatPromptTemplate.from_template(
             """You are an intelligent assistant helping users understand their documents.
 
