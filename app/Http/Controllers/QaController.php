@@ -80,6 +80,7 @@ class QaController extends Controller
         ]);
 
         $chat = Chat::findOrFail($chatId);
+        $this->authorizeChat($chat);
         $chat->update(['title' => $request->input('title')]);
 
         return response()->json([
@@ -107,6 +108,7 @@ class QaController extends Controller
         $chat = Chat::with(['messages' => function($query) {
             $query->orderBy('created_at', 'asc');
         }, 'files'])->findOrFail($chatId);
+        $this->authorizeChat($chat);
 
         return response()->json($chat);
     }
@@ -117,6 +119,7 @@ class QaController extends Controller
             'messages' => fn ($query) => $query->orderBy('created_at', 'asc'),
             'files',
         ])->findOrFail($chatId);
+        $this->authorizeChat($chat);
 
         $payload = json_encode([
             'exported_at' => now()->toIso8601String(),
@@ -143,6 +146,7 @@ class QaController extends Controller
     public function deleteChat($chatId)
     {
         $chat = Chat::findOrFail($chatId);
+        $this->authorizeChat($chat);
 
         $uploadPath = base_path("data/uploads/{$chatId}");
         if (is_dir($uploadPath)) {
@@ -157,6 +161,7 @@ class QaController extends Controller
     public function deleteFile($chatId, $fileId)
     {
         $file = ChatFile::where('chat_id', $chatId)->findOrFail($fileId);
+        $this->authorizeChat($file->chat);
 
         if (file_exists($file->file_path)) {
             unlink($file->file_path);
@@ -174,6 +179,7 @@ class QaController extends Controller
         ]);
 
         $message = ChatMessage::where('chat_id', $chatId)->findOrFail($messageId);
+        $this->authorizeChat($message->chat);
 
         $message->update([
             'question' => $request->input('question'),
@@ -213,6 +219,8 @@ class QaController extends Controller
             return response()->json(['error' => 'File not found'], 404);
         }
 
+        $this->authorizeChat($file->chat);
+
         if (!file_exists($file->file_path)) {
             return response()->json(['error' => 'File not found on disk'], 404);
         }
@@ -240,6 +248,7 @@ class QaController extends Controller
     public function downloadFile($chatId, $fileId)
     {
         $file = ChatFile::where('chat_id', $chatId)->findOrFail($fileId);
+        $this->authorizeChat($file->chat);
 
         if (!is_file($file->file_path)) {
             return response()->json(['error' => 'File not found on disk'], 404);
@@ -251,6 +260,7 @@ class QaController extends Controller
     public function uploadFile(Request $request, $chatId)
     {
         $chat = Chat::findOrFail($chatId);
+        $this->authorizeChat($chat);
 
         $request->validate([
             'file' => 'required|file|max:20480|mimes:pdf,docx,txt,csv,xlsx,png,jpg,jpeg,tiff,bmp',
@@ -290,6 +300,7 @@ class QaController extends Controller
         }
 
         $chat = Chat::findOrFail($chatId);
+        $this->authorizeChat($chat);
 
         $message = ChatMessage::create([
             'chat_id' => $chatId,
@@ -340,5 +351,13 @@ class QaController extends Controller
             is_dir($path) ? $this->deleteDirectory($path) : unlink($path);
         }
         rmdir($dir);
+    }
+
+    private function authorizeChat(Chat $chat): void
+    {
+        $user = request()->user();
+        if ($user && $chat->user_id !== $user->id) {
+            abort(403, 'You do not have access to this chat.');
+        }
     }
 }
