@@ -22,6 +22,11 @@ paths:
                 title: { type: string }
       responses:
         '201': { description: Chat created }
+  /analytics:
+    get:
+      summary: Get usage counters
+      responses:
+        '200': { description: Chat, file, and message counts }
   /chats/{chatId}/upload:
     post:
       summary: Upload a document

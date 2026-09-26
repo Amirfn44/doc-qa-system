@@ -11,6 +11,7 @@ Route::get('/auth/me', [QaController::class, 'me']);
 
 Route::post('/chats', [QaController::class, 'createChat']);
 Route::get('/chats', [QaController::class, 'getChats']);
+Route::get('/analytics', [QaController::class, 'analytics']);
 Route::get('/chats/{chatId}', [QaController::class, 'getChat']);
 Route::get('/chats/{chatId}/export', [QaController::class, 'exportChat']);
 Route::patch('/chats/{chatId}/title', [QaController::class, 'updateChatTitle']);

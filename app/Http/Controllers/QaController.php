@@ -103,6 +103,26 @@ class QaController extends Controller
         return response()->json($chats);
     }
 
+    public function analytics()
+    {
+        $chatQuery = Chat::query();
+        if ($user = request()->user()) {
+            $chatQuery->where('user_id', $user->id);
+        }
+
+        $chatIds = $chatQuery->pluck('id');
+        $messageQuery = ChatMessage::whereIn('chat_id', $chatIds);
+        $fileQuery = ChatFile::whereIn('chat_id', $chatIds);
+
+        return response()->json([
+            'chats' => $chatIds->count(),
+            'files' => $fileQuery->count(),
+            'messages' => $messageQuery->count(),
+            'answered_messages' => (clone $messageQuery)->whereNotNull('answer')->count(),
+            'pending_messages' => (clone $messageQuery)->whereNull('answer')->count(),
+        ]);
+    }
+
     public function getChat($chatId)
     {
         $chat = Chat::with(['messages' => function($query) {
