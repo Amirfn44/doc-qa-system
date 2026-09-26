@@ -7,6 +7,7 @@ use App\Http\Controllers\QaController;
 Route::post('/chats', [QaController::class, 'createChat']);
 Route::get('/chats', [QaController::class, 'getChats']);
 Route::get('/chats/{chatId}', [QaController::class, 'getChat']);
+Route::get('/chats/{chatId}/export', [QaController::class, 'exportChat']);
 Route::patch('/chats/{chatId}/title', [QaController::class, 'updateChatTitle']);
 Route::delete('/chats/{chatId}', [QaController::class, 'deleteChat']);
 

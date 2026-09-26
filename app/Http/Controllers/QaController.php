@@ -59,6 +59,35 @@ class QaController extends Controller
         return response()->json($chat);
     }
 
+    public function exportChat($chatId)
+    {
+        $chat = Chat::with([
+            'messages' => fn ($query) => $query->orderBy('created_at', 'asc'),
+            'files',
+        ])->findOrFail($chatId);
+
+        $payload = json_encode([
+            'exported_at' => now()->toIso8601String(),
+            'chat' => [
+                'id' => $chat->id,
+                'title' => $chat->title,
+                'created_at' => $chat->created_at,
+                'updated_at' => $chat->updated_at,
+            ],
+            'messages' => $chat->messages,
+            'files' => $chat->files->map(fn ($file) => [
+                'id' => $file->id,
+                'filename' => $file->original_name,
+                'uploaded_at' => $file->created_at,
+            ]),
+        ], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+
+        return response($payload, 200, [
+            'Content-Type' => 'application/json',
+            'Content-Disposition' => 'attachment; filename="chat-' . $chat->id . '.json"',
+        ]);
+    }
+
     public function deleteChat($chatId)
     {
         $chat = Chat::findOrFail($chatId);

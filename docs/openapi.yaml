@@ -39,6 +39,16 @@ paths:
       responses:
         '200': { description: File uploaded }
         '422': { description: Validation error }
+  /chats/{chatId}/export:
+    get:
+      summary: Export chat history as JSON
+      parameters:
+        - $ref: '#/components/parameters/ChatId'
+      responses:
+        '200':
+          description: Downloadable chat export
+          content:
+            application/json: {}
   /chats/{chatId}/ask:
     post:
       summary: Queue a question
