@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    @vite('resources/js/app.js')
     <title>Doc Q&A - Multi Chat</title>
     <style>
         * {
@@ -879,7 +880,7 @@
     <div class="container">
         <div class="sidebar">
             <div class="sidebar-header">
-                <button class="new-chat-btn" onclick="createNewChat()">+ New Chat</button>
+                <button class="new-chat-btn" onclick="createNewChat()"><i data-lucide="plus"></i> New Chat</button>
             </div>
             <div class="chats-list" id="chats-list"></div>
         </div>
@@ -888,7 +889,7 @@
             <div class="chat-header">
                 <div class="chat-header-left">
                     <h1 id="chat-title">Select or create a chat</h1>
-                    <button class="rename-btn" id="rename-btn" onclick="openRenameModal()" style="display: none;" title="Rename chat">✏️</button>
+                    <button class="rename-btn" id="rename-btn" onclick="openRenameModal()" style="display: none;" title="Rename chat"><i data-lucide="pencil"></i></button>
                 </div>
             </div>
 
@@ -902,7 +903,7 @@
             <div class="input-area" id="input-area" style="display: none;">
                 <div class="file-upload-area">
                     <div class="file-input-wrapper">
-                        <label class="file-input-label" for="file-input">📎 Upload File</label>
+                        <label class="file-input-label" for="file-input"><i data-lucide="paperclip"></i> Upload File</label>
                         <input type="file" id="file-input" class="file-input" onchange="uploadFile()">
                     </div>
                     <div class="uploaded-files" id="uploaded-files"></div>
@@ -910,7 +911,7 @@
 
                 <div class="input-wrapper">
                     <textarea id="question-input" class="question-input" rows="3" placeholder="Ask a question about your documents..." onkeydown="handleKeyPress(event)"></textarea>
-                    <button class="send-btn" onclick="askQuestion()">Send</button>
+                    <button class="send-btn" onclick="askQuestion()"><i data-lucide="send"></i> Send</button>
                 </div>
             </div>
         </div>
