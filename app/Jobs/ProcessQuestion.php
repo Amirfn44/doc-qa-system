@@ -34,7 +34,7 @@ class ProcessQuestion implements ShouldQueue
 
     public function handle(): void
     {
-        $pythonExecutable = 'C:\\Users\\AmirFR\\AppData\\Local\\Programs\\Python\\Python312\\python.exe';
+        $pythonExecutable = config('services.python.executable', 'python');
         $scriptPath = base_path('main.py');
 
         try {
@@ -123,9 +123,10 @@ class ProcessQuestion implements ShouldQueue
             preg_match('/--- Citations ---\s*\n(.*?)(?=\n--- Summary ---|$)/s', $output, $citationsMatch);
             if (isset($citationsMatch[1])) {
                 $citationsStr = trim($citationsMatch[1]);
-                $citationsStr = str_replace(['[', ']', "'", '"'], '', $citationsStr);
-                $citationsArray = array_filter(array_map('trim', explode(',', $citationsStr)));
-                $citations = array_values(array_unique($citationsArray));
+                $decoded = json_decode($citationsStr, true);
+                if (is_array($decoded)) {
+                    $citations = $decoded;
+                }
             }
         } elseif (strpos($output, '--- Clarification ---') !== false) {
             preg_match('/--- Clarification ---\s*\n(.*)/s', $output, $clarificationMatch);

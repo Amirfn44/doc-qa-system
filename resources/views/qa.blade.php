@@ -1017,9 +1017,9 @@
                                         <div class="sources-title">📚 Sources</div>
                                         <div>
                                             ${msg.citations.map(c => `
-                                                <span class="source-item" onclick="openFileViewer('${escapeHtml(c)}', ${msg.id})" title="Click to view document">
+                                                <span class="source-item" onclick="openFileViewer('${escapeHtml(typeof c === 'string' ? c : c.filename)}', ${msg.id})" title="Click to view document">
                                                     <span class="source-icon">📄</span>
-                                                    <span>${escapeHtml(c)}</span>
+                                                    <span>${escapeHtml(typeof c === 'string' ? c : `${c.filename} · chunk ${c.chunk_index + 1}`)}</span>
                                                 </span>
                                             `).join('')}
                                         </div>
@@ -1386,15 +1386,23 @@
             const fileContentEl = document.getElementById('file-content');
             const searchInfoEl = document.getElementById('search-info');
 
+            // Escape uploaded content before inserting highlighting markup.
+            const escapedContent = String(content)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+
             const words = answerText.toLowerCase().replace(/[^\w\s]/g, ' ').split(/\s+/).filter(w => w.length >= 4);
             const uniqueWords = [...new Set(words)];
 
-            let highlightedContent = content;
+            let highlightedContent = escapedContent;
             let highlightCount = 0;
 
             uniqueWords.forEach(word => {
                 const regex = new RegExp(`\\b(${word}\\w*)\\b`, 'gi');
-                const matches = content.match(regex);
+                const matches = escapedContent.match(regex);
                 if (matches && matches.length > 0) {
                     highlightCount += matches.length;
                     highlightedContent = highlightedContent.replace(regex, '<span class="highlight">$1</span>');

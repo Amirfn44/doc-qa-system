@@ -35,4 +35,8 @@ return [
         ],
     ],
 
+    'python' => [
+        'executable' => env('PYTHON_EXECUTABLE', 'python'),
+    ],
+
 ];

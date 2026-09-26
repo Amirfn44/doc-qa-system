@@ -4,7 +4,11 @@ from PIL import Image
 import pytesseract
 import pandas as pd
 
-pytesseract.pytesseract.tesseract_cmd = r"D:\Program Files\Tesseract-OCR\tesseract.exe"
+import os
+
+_tesseract_path = os.getenv("TESSERACT_CMD")
+if _tesseract_path:
+    pytesseract.pytesseract.tesseract_cmd = _tesseract_path
 
 def load_pdf(file_path):
     doc = fitz.open(file_path)

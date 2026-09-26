@@ -209,6 +209,9 @@ COHERE_API_KEY=your_cohere_api_key
 
 # Python Path (update for your system)
 PYTHON_EXECUTABLE=C:\Users\YourName\AppData\Local\Programs\Python\Python312\python.exe
+
+# OCR executable (optional when tesseract is already on PATH)
+TESSERACT_CMD=C:\Program Files\Tesseract-OCR\tesseract.exe
 ```
 
 ### Python Configuration

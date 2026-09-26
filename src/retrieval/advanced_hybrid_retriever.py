@@ -1,6 +1,9 @@
+import os
+
 from langchain_community.retrievers import BM25Retriever
 from langchain.retrievers import EnsembleRetriever
 from langchain_cohere import CohereRerank
+from src.utils.rate_limiter import COHERE_LIMITER
 from langchain_core.documents import Document
 from typing import List
 import numpy as np
@@ -22,10 +25,9 @@ class AdvancedHybridRetriever:
         self.bm25_retriever = BM25Retriever.from_documents(documents)
         self.bm25_retriever.k = 15
 
-        self.reranker = CohereRerank(
-            model="rerank-english-v3.0",
-            top_n=10
-        )
+        self.reranker = None
+        if os.getenv("COHERE_API_KEY"):
+            self.reranker = CohereRerank(model="rerank-english-v3.0", top_n=10)
 
     def reciprocal_rank_fusion(
         self,
@@ -155,10 +157,14 @@ class AdvancedHybridRetriever:
         candidates = fused_results[:20]
 
         try:
-            reranked_docs = self.reranker.compress_documents(
-                documents=candidates,
-                query=query
-            )
+            if self.reranker is None:
+                reranked_docs = candidates
+            else:
+                reranked_docs = COHERE_LIMITER.call_with_retry(
+                    self.reranker.compress_documents,
+                    documents=candidates,
+                    query=query,
+                )
         except Exception as e:
             print(f"Reranking failed: {e}, using fused results")
             reranked_docs = candidates

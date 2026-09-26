@@ -148,13 +148,13 @@ class QaController extends Controller
     {
         $chat = Chat::findOrFail($chatId);
 
-        if (!$request->hasFile('file')) {
-            return response()->json(['error' => 'No file provided'], 400);
-        }
+        $request->validate([
+            'file' => 'required|file|max:20480|mimes:pdf,docx,txt,csv,xlsx,png,jpg,jpeg,tiff,bmp',
+        ]);
 
         $file = $request->file('file');
         $originalName = $file->getClientOriginalName();
-        $filename = time() . '_' . $originalName;
+        $filename = Str::uuid() . '.' . $file->getClientOriginalExtension();
 
         $uploadPath = base_path("data/uploads/{$chatId}");
         if (!is_dir($uploadPath)) {

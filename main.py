@@ -1,5 +1,6 @@
 import os
 import sys
+import json
 from dotenv import load_dotenv
 
 from src.ingestion.processor import process_file
@@ -8,10 +9,6 @@ from src.retrieval.advanced_hybrid_retriever import AdvancedHybridRetriever
 from src.graph.workflow import create_workflow
 
 load_dotenv()
-
-if "COHERE_API_KEY" not in os.environ:
-    sys.stderr.write("Error: COHERE_API_KEY environment variable not set\n")
-    sys.exit(1)
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
@@ -99,7 +96,7 @@ if __name__ == "__main__":
         if final_state.get("citations"):
             output_parts = [
                 f"--- Answer ---\n{final_state['answer']}",
-                f"\n--- Citations ---\n{final_state['citations']}",
+                f"\n--- Citations ---\n{json.dumps(final_state['citations'], ensure_ascii=False)}",
                 f"\n--- Summary ---\n{final_state['utility_response']}",
             ]
             sys.stdout.write("".join(output_parts))

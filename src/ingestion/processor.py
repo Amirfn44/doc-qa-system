@@ -43,7 +43,11 @@ def process_file(file_path):
     for idx, chunk in enumerate(chunks):
         documents.append(Document(
             page_content=chunk,
-            metadata={"source_file": os.path.basename(file_path), "chunk_index": idx},
+            metadata={
+                "source_file": os.path.basename(file_path),
+                "chunk_index": idx,
+                "source_path": file_path,
+            },
             id=str(uuid.uuid4())
         ))
     return documents

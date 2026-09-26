@@ -49,7 +49,15 @@ Your Complete Answer:"""
             {"query": query, "documents": formatted_docs}
         )
 
-        citations = list(set([doc.metadata["source_file"] for doc in documents]))
+        citations = []
+        seen = set()
+        for doc in documents:
+            source_file = doc.metadata.get("source_file", "unknown")
+            chunk_index = doc.metadata.get("chunk_index")
+            key = (source_file, chunk_index)
+            if key not in seen:
+                citations.append({"filename": source_file, "chunk_index": chunk_index, "excerpt": doc.page_content[:240]})
+                seen.add(key)
 
         answer = response.strip()
 
