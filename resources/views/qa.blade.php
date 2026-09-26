@@ -455,6 +455,16 @@
             transform: scale(1.25);
         }
 
+        .source-excerpt {
+            display: block;
+            max-width: 420px;
+            margin-top: 5px;
+            color: #666;
+            font-size: 11px;
+            font-weight: 400;
+            line-height: 1.4;
+        }
+
         /* File Viewer Modal */
         .file-viewer-modal {
             display: none;
@@ -1019,7 +1029,10 @@
                                             ${msg.citations.map(c => `
                                                 <span class="source-item" onclick="openFileViewer('${escapeHtml(typeof c === 'string' ? c : c.filename)}', ${msg.id})" title="Click to view document">
                                                     <span class="source-icon">📄</span>
-                                                    <span>${escapeHtml(typeof c === 'string' ? c : `${c.filename} · chunk ${c.chunk_index + 1}`)}</span>
+                                                    <span>
+                                                        <strong>${escapeHtml(typeof c === 'string' ? c : `${c.filename} · chunk ${c.chunk_index + 1}`)}</strong>
+                                                        ${typeof c === 'string' || !c.excerpt ? '' : `<small class="source-excerpt">${escapeHtml(c.excerpt)}</small>`}
+                                                    </span>
                                                 </span>
                                             `).join('')}
                                         </div>
