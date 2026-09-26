@@ -2,7 +2,7 @@ from langchain_core.prompts import ChatPromptTemplate
 from langchain_ollama.llms import OllamaLLM as Ollama
 from src.graph.state import AgentState
 from src.utils.rate_limiter import OLLAMA_LIMITER
-from src.llm.config import CHAT_MODEL
+from src.llm.config import ANSWER_LANGUAGE, CHAT_MODEL
 
 class ReasoningAgent:
     def __init__(self):
@@ -19,6 +19,8 @@ You will be given a query and relevant excerpts from documents. Your task is to:
 6. If the documents contain information for any part of the query, include it in your answer
 
 Query: {query}
+
+Answer language: {language}
 
 Relevant Document Excerpts:
 {documents}
@@ -47,7 +49,7 @@ Your Complete Answer:"""
 
         response = OLLAMA_LIMITER.call_with_retry(
             self.chain.invoke,
-            {"query": query, "documents": formatted_docs}
+            {"query": query, "documents": formatted_docs, "language": ANSWER_LANGUAGE}
         )
 
         citations = []
