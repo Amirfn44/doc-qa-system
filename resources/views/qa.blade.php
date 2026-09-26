@@ -856,6 +856,23 @@
         ::-webkit-scrollbar-thumb:hover {
             background: linear-gradient(180deg, rgba(255, 255, 255, 0.18) 0%, rgba(255, 255, 255, 0.12) 100%);
         }
+        @media (max-width: 768px) {
+            body { overflow: auto; }
+            .container { min-height: 100vh; height: auto; flex-direction: column; }
+            .sidebar { width: 100%; max-height: 180px; border-right: 0; border-bottom: 1px solid rgba(255,255,255,.08); }
+            .sidebar-header { padding: 12px; }
+            .chats-list { display: flex; gap: 8px; overflow-x: auto; padding: 8px 12px; }
+            .chat-item { min-width: 180px; margin-bottom: 0; }
+            .main-content { min-height: calc(100vh - 180px); }
+            .chat-header { padding: 16px; }
+            .messages-container { padding: 16px; }
+            .message { max-width: 100%; margin-bottom: 20px; }
+            .message-content { padding: 14px 16px; font-size: 14px; }
+            .input-area { padding: 12px; }
+            .source-item { max-width: 100%; margin-right: 0; }
+            .source-excerpt { max-width: 260px; }
+            .file-viewer-content { width: 96%; height: 82vh; }
+        }
     </style>
 </head>
 <body>
