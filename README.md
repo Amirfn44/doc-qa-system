@@ -708,6 +708,5 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-**Made with ❤️ by Your Team**
 
 *For questions or support, please open an issue on GitHub.*
