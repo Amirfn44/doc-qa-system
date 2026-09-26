@@ -62,7 +62,8 @@ class QaController extends Controller
     public function createChat(Request $request)
     {
         $chat = Chat::create([
-            'title' => $request->input('title', 'New Chat')
+            'title' => $request->input('title', 'New Chat'),
+            'user_id' => $request->user()?->id,
         ]);
 
         return response()->json([
@@ -89,7 +90,12 @@ class QaController extends Controller
 
     public function getChats()
     {
-        $chats = Chat::with('messages', 'files')
+        $query = Chat::with('messages', 'files');
+        if ($requestUser = request()->user()) {
+            $query->where('user_id', $requestUser->id);
+        }
+
+        $chats = $query
             ->orderBy('updated_at', 'desc')
             ->get();
 
