@@ -1,0 +1,74 @@
+openapi: 3.0.3
+info:
+  title: Document Q&A API
+  version: 1.0.0
+  description: API for multi-chat document upload and question answering.
+servers:
+  - url: http://localhost:8000/api
+paths:
+  /chats:
+    get:
+      summary: List chats
+      responses:
+        '200': { description: Chat list }
+    post:
+      summary: Create a chat
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title: { type: string }
+      responses:
+        '201': { description: Chat created }
+  /chats/{chatId}/upload:
+    post:
+      summary: Upload a document
+      parameters:
+        - $ref: '#/components/parameters/ChatId'
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required: [file]
+              properties:
+                file: { type: string, format: binary }
+      responses:
+        '200': { description: File uploaded }
+        '422': { description: Validation error }
+  /chats/{chatId}/ask:
+    post:
+      summary: Queue a question
+      parameters:
+        - $ref: '#/components/parameters/ChatId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [question]
+              properties:
+                question: { type: string }
+      responses:
+        '200': { description: Query queued }
+  /check-status:
+    get:
+      summary: Poll query status
+      parameters:
+        - name: query_id
+          in: query
+          required: true
+          schema: { type: string }
+      responses:
+        '200': { description: Query status }
+components:
+  parameters:
+    ChatId:
+      name: chatId
+      in: path
+      required: true
+      schema: { type: integer }
