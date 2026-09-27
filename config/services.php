@@ -36,7 +36,11 @@ return [
     ],
 
     'python' => [
-        'executable' => env('PYTHON_EXECUTABLE', 'python'),
+        'executable' => env('PYTHON_EXECUTABLE') ?: (
+            file_exists(base_path(PHP_OS_FAMILY === 'Windows' ? 'venv/Scripts/python.exe' : 'venv/bin/python'))
+                ? base_path(PHP_OS_FAMILY === 'Windows' ? 'venv/Scripts/python.exe' : 'venv/bin/python')
+                : 'python'
+        ),
     ],
 
 ];

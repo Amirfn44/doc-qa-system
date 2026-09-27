@@ -147,8 +147,8 @@ COHERE_API_KEY=your_cohere_api_key_here
 # Install Ollama (visit https://ollama.com/download)
 
 # Pull required models
-ollama pull llama3.2
-ollama pull mxbai-embed-large
+ollama pull qwen3:14b
+ollama pull qwen3-embedding:latest
 
 # Start Ollama server
 ollama serve
@@ -208,8 +208,8 @@ QUEUE_CONNECTION=database
 COHERE_API_KEY=your_cohere_api_key
 
 # Ollama models (change without editing source code)
-OLLAMA_CHAT_MODEL=llama3.2
-OLLAMA_EMBEDDING_MODEL=mxbai-embed-large
+OLLAMA_CHAT_MODEL=qwen3:14b
+OLLAMA_EMBEDDING_MODEL=qwen3-embedding:latest
 QA_LANGUAGE=English
 
 # Python Path (update for your system)
@@ -451,9 +451,11 @@ def detect_file_type(file_path):
 
 1. Create agent in `src/agents/your_agent.py`:
 ```python
+from src.llm.config import CHAT_MODEL
+
 class YourAgent:
     def __init__(self):
-        self.llm = Ollama(model="llama3.2")
+        self.llm = Ollama(model=CHAT_MODEL)
     
     def process(self, state: AgentState):
         # Your logic

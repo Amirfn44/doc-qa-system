@@ -875,642 +875,339 @@
             .file-viewer-content { width: 96%; height: 82vh; }
         }
 
-        /* Aurora workspace theme */
+        /* Graphite workspace: mint accents, inset panels, consistent icon sizing. */
         :root {
-            --ink: #f6f7fb;
-            --muted: #9ba3b5;
-            --panel: rgba(19, 24, 38, .82);
-            --panel-soft: rgba(255, 255, 255, .055);
-            --line: rgba(255, 255, 255, .1);
-            --accent: #a78bfa;
-            --accent-2: #67e8f9;
-            --shadow: 0 24px 80px rgba(0, 0, 0, .32);
+            --ink: #eaf0ed;
+            --muted: #a1b0ab;
+            --panel: #111817;
+            --panel-soft: #18211f;
+            --line: #2a3833;
+            --line-hover: #587568;
+            --accent: #a6edd5;
+            --accent-soft: #1d3830;
+            --radius: 12px;
+            --icon-size: 18px;
         }
-
         body {
-            background:
-                radial-gradient(circle at 12% 8%, rgba(167, 139, 250, .16), transparent 28%),
-                radial-gradient(circle at 88% 92%, rgba(103, 232, 249, .1), transparent 30%),
-                #080b13;
+            background: #090e0c;
             color: var(--ink);
-            font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            font-family: "Segoe UI", ui-sans-serif, system-ui, -apple-system, sans-serif;
+            font-size: 14px;
+            height: 100dvh;
+            color-scheme: dark;
         }
-
-        .sidebar, .chat-header, .input-area {
-            background: var(--panel);
-            border-color: var(--line);
-            backdrop-filter: blur(22px);
+        button, input, textarea { font-family: inherit; }
+        button, label, .chat-item, .source-item { transition: background .18s ease, border-color .18s ease, color .18s ease; }
+        button:focus-visible, textarea:focus-visible, input:focus-visible, [tabindex]:focus-visible {
+            outline: 2px solid var(--accent); outline-offset: 3px;
         }
-
-        .sidebar { box-shadow: 16px 0 60px rgba(0, 0, 0, .18); }
-        .new-chat-btn, .send-btn {
-            background: linear-gradient(135deg, var(--accent), var(--accent-2));
-            color: #0b0d16;
-            border-radius: 12px;
-            box-shadow: 0 10px 28px rgba(167, 139, 250, .2);
+        [data-lucide] { width: var(--icon-size); height: var(--icon-size); flex-shrink: 0; vertical-align: middle; stroke-width: 1.8; }
+        .container { height: 100dvh; padding: 12px; gap: 12px; }
+        .sidebar, .main-content { background: var(--panel); border: 1px solid var(--line); border-radius: 16px; min-height: 0; animation: none; }
+        .sidebar { width: 272px; flex-shrink: 0; box-shadow: none; }
+        .sidebar-header { padding: 22px 16px 18px; border-bottom: 1px solid var(--line); }
+        .workspace-brand { display: flex; align-items: center; gap: 11px; margin-bottom: 24px; }
+        .brand-mark, .header-mark, .empty-state-mark { display: inline-flex; align-items: center; justify-content: center; color: var(--accent); background: var(--accent-soft); border: 1px solid #3b5e50; }
+        .brand-mark { width: 38px; height: 38px; border-radius: 11px; --icon-size: 21px; }
+        .brand-name { font-size: 17px; font-weight: 650; letter-spacing: -.5px; }
+        .brand-caption { color: var(--muted); font-size: 11px; margin-top: 2px; }
+        .new-chat-btn, .send-btn, .modal-btn-save, .edit-btn-save {
+            background: var(--accent); color: #10271e; border: 1px solid #baf6e1; border-radius: var(--radius); box-shadow: inset 0 1px 0 #d7ffef; font-weight: 650; letter-spacing: 0;
         }
-        .new-chat-btn:hover, .send-btn:hover { box-shadow: 0 14px 36px rgba(103, 232, 249, .24); }
-        .chat-item { background: var(--panel-soft); border-color: var(--line); }
-        .chat-item.active { background: linear-gradient(135deg, rgba(167, 139, 250, .95), rgba(103, 232, 249, .9)); color: #0b0d16; }
-        .messages-container { background: transparent; }
-        .message-content { border-radius: 18px; border-color: var(--line); }
-        .question { background: rgba(255, 255, 255, .045); }
-        .answer { background: rgba(246, 247, 251, .96); box-shadow: var(--shadow); }
-        .question-input { background: rgba(255, 255, 255, .06); border-color: var(--line); border-radius: 14px; }
-        .question-input:focus { border-color: var(--accent); box-shadow: 0 0 0 4px rgba(167, 139, 250, .14); }
-        .file-input-label, .file-tag, .rename-btn, .chat-action-btn { border-color: var(--line); background: rgba(255, 255, 255, .05); }
-        .source-item { border-color: rgba(0, 0, 0, .08); border-radius: 12px; }
-        .source-excerpt { color: #596174; }
-        [data-lucide] { width: 16px; height: 16px; vertical-align: -3px; stroke-width: 2; }
-        button, label, .chat-item, .source-item { transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease, background .2s ease; }
-        button:focus-visible, textarea:focus-visible, input:focus-visible { outline: 2px solid var(--accent-2); outline-offset: 3px; }
+        .new-chat-btn { display: flex; justify-content: center; align-items: center; gap: 10px; min-height: 46px; padding: 11px 16px; font-size: 14px; --icon-size: 20px; }
+        .new-chat-btn:before { display: none; }
+        .new-chat-btn:hover, .send-btn:hover, .modal-btn-save:hover, .edit-btn-save:hover { background: #c1f6e4; box-shadow: none; transform: none; }
+        .sidebar-section-label, .header-eyebrow { color: var(--muted); font-size: 10px; font-weight: 650; letter-spacing: 1.5px; text-transform: uppercase; }
+        .sidebar-section-label { padding: 20px 18px 8px; }
+        .chats-list { padding: 4px 10px 12px; min-height: 0; }
+        .chat-item { padding: 10px; min-height: 64px; gap: 9px; margin-bottom: 6px; border: 1px solid transparent; border-radius: 10px; background: transparent; animation: none; }
+        .chat-item > [data-lucide] { color: var(--muted); --icon-size: 19px; }
+        .chat-item:hover, .chat-item.active { transform: none; box-shadow: none; color: var(--ink); background: var(--panel-soft); border-color: var(--line); }
+        .chat-item.active { border-color: #426554; box-shadow: inset 3px 0 0 var(--accent); }
+        .chat-item.active > [data-lucide] { color: var(--accent); }
+        .chat-title { font-size: 13px; font-weight: 550; margin-bottom: 4px; }
+        .chat-date { color: var(--muted); opacity: 1; font-size: 11px; }
+        .chat-actions { gap: 2px; }
+        .chat-item:focus-within .chat-actions, .chat-item.active .chat-actions { opacity: 1; }
+        .chat-action-btn { width: 30px; height: 34px; padding: 0; border: 1px solid transparent; background: transparent; border-radius: 7px; --icon-size: 15px; }
+        .chat-item.active .chat-action-btn { background: transparent; }
+        .chat-action-btn:hover, .chat-item.active .chat-action-btn:hover { background: #283a32; border-color: var(--line-hover); transform: none; }
+        .sidebar-footer { padding: 16px 18px; color: var(--muted); font-size: 11px; display: flex; align-items: center; gap: 8px; border-top: 1px solid var(--line); --icon-size: 15px; }
+        .main-content { min-width: 0; overflow: hidden; }
+        .chat-header { min-height: 80px; padding: 16px 28px; background: var(--panel); border-color: var(--line); }
+        .chat-header-left { gap: 12px; }
+        .header-mark { width: 40px; height: 40px; border-radius: 11px; background: var(--panel-soft); border-color: var(--line); --icon-size: 20px; flex-shrink: 0; }
+        .header-titles { min-width: 0; }
+        .header-eyebrow { margin-bottom: 4px; font-size: 9px; }
+        .chat-header h1 { font-size: 17px; font-weight: 600; letter-spacing: -.3px; }
+        .rename-btn { width: 40px; height: 40px; margin-left: auto; flex-shrink: 0; padding: 8px; color: var(--muted); background: transparent; border: 1px solid var(--line); border-radius: 10px; }
+        .rename-btn:hover { background: var(--panel-soft); border-color: var(--line-hover); color: var(--ink); transform: none; }
+        .messages-container { padding: 36px clamp(20px, 5vw, 72px); min-height: 0; background: radial-gradient(#26362f 0.7px, transparent 0.7px); background-size: 24px 24px; }
+        .message { max-width: 820px; margin: 0 auto 24px; }
+        .message-label { color: var(--muted); opacity: 1; letter-spacing: 1px; margin-bottom: 9px; display: flex; align-items: center; gap: 7px; --icon-size: 14px; }
+        .message-content { padding: 18px 22px; font-size: 14px; line-height: 1.75; border-radius: var(--radius); border: 1px solid var(--line); overflow-wrap: anywhere; }
+        .message:hover .message-content { transform: none; }
+        .question { background: #18221e; box-shadow: none; }
+        .answer { background: #121b17; color: var(--ink); border-color: #365044; box-shadow: inset 3px 0 0 #547d68; }
+        .sources-section { border-top: 1px solid var(--line); padding-top: 18px; margin-top: 20px; }
+        .sources-title { opacity: 1; color: var(--muted); display: flex; align-items: center; gap: 8px; --icon-size: 15px; }
+        .source-item { max-width: 100%; text-align: left; color: var(--ink); background: var(--panel-soft); border: 1px solid var(--line); border-radius: 10px; padding: 12px; font-size: 12px; }
+        .source-item:hover { background: #24372d; border-color: var(--line-hover); box-shadow: none; transform: none; }
+        .source-item:hover .source-icon { transform: none; }
+        .source-icon { color: var(--accent); opacity: 1; }
+        .source-excerpt { color: var(--muted); font-size: 12px; }
+        .input-area { background: var(--panel); border-top: 1px solid var(--line); padding: 18px clamp(20px, 5vw, 72px) 14px; }
+        .file-upload-area, .input-wrapper, .composer-hint { max-width: 820px; margin-left: auto; margin-right: auto; }
+        .input-wrapper { gap: 10px; align-items: stretch; }
+        .file-input-label { display: inline-flex; align-items: center; gap: 9px; min-height: 42px; padding: 9px 13px; font-size: 12px; color: var(--ink); background: var(--panel-soft); border: 1px dashed #587365; border-radius: 10px; }
+        .file-input-label:hover { transform: none; background: #24372d; border-color: var(--accent); box-shadow: none; }
+        .file-input { display: block; position: absolute; width: 1px; height: 1px; opacity: 0; overflow: hidden; }
+        .file-input-wrapper:focus-within .file-input-label { outline: 2px solid var(--accent); outline-offset: 3px; }
+        .file-tag { min-width: 0; max-width: 100%; padding: 6px 8px 6px 10px; gap: 7px; border-radius: 8px; border-color: var(--line); background: var(--panel-soft); color: var(--muted); --icon-size: 15px; }
+        .file-tag-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .file-tag:hover { transform: none; border-color: var(--line-hover); }
+        .file-tag-remove { display: inline-flex; justify-content: center; align-items: center; min-width: 28px; height: 28px; padding: 4px; background: transparent; color: var(--muted); border-radius: 6px; }
+        .file-tag-remove:hover { color: #ffb4b4; background: #422424; transform: none; }
+        .question-input { min-width: 0; min-height: 80px; padding: 15px 17px; font-size: 14px; background: #0d1411; border: 1px solid #3a5045; border-radius: var(--radius); }
+        .question-input::placeholder { color: #96a99e; }
+        .question-input:focus, .modal-input:focus, .edit-input:focus { background: #101c16; border-color: var(--accent); box-shadow: 0 0 0 3px #a6edd515; }
+        .send-btn { align-self: flex-end; display: inline-flex; align-items: center; justify-content: center; width: 46px; height: 46px; padding: 0; margin-bottom: 1px; flex-shrink: 0; --icon-size: 22px; }
+        .composer-hint { margin-top: 10px; color: var(--muted); font-size: 10px; }
+        .empty-state { max-width: 620px; margin: clamp(12px, 6vh, 64px) auto; padding: 28px 12px; opacity: 1; animation: fadeIn .3s ease-out; }
+        .empty-state-mark { width: 68px; height: 68px; border-radius: 20px; margin-bottom: 26px; --icon-size: 30px; box-shadow: 0 0 0 7px #a6edd507; }
+        .empty-state h2 { font-size: clamp(28px, 3.5vw, 42px); font-weight: 550; line-height: 1.15; letter-spacing: -1.7px; margin-bottom: 16px; }
+        .empty-state h2 span { color: var(--accent); }
+        .empty-state p { color: var(--muted); font-size: 14px; line-height: 1.7; font-weight: 400; opacity: 1; max-width: 390px; margin: auto; }
+        .welcome-steps { display: flex; justify-content: center; gap: 8px; margin-top: 28px; flex-wrap: wrap; }
+        .welcome-step { display: inline-flex; align-items: center; gap: 8px; padding: 10px 13px; background: var(--panel); border: 1px solid var(--line); border-radius: 9px; color: var(--muted); font-size: 11px; --icon-size: 16px; }
+        .welcome-step [data-lucide] { color: var(--accent); }
+        .list-empty { padding: 22px 10px; color: var(--muted); text-align: center; font-size: 12px; line-height: 1.7; }
+        .modal-content, .file-viewer-content { background: var(--panel); border: 1px solid #45604f; border-radius: 16px; color: var(--ink); }
+        .modal-content { padding: 26px; }
+        .modal-header { font-size: 20px; }
+        .modal-input, .edit-input { background: #0d1411; border-color: var(--line); border-radius: 10px; font-size: 14px; }
+        .modal-btn, .edit-btn { min-height: 42px; padding: 10px 18px; font-size: 13px; letter-spacing: 0; display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
+        .modal-btn-cancel, .edit-btn-cancel { border-color: var(--line); background: var(--panel-soft); }
+        .modal-btn-cancel:hover, .edit-btn-cancel:hover { transform: none; }
+        .message-actions { opacity: 1; }
+        .message-action-btn { color: var(--muted); display: inline-flex; align-items: center; gap: 6px; min-height: 32px; padding: 5px 9px; --icon-size: 14px; }
+        .message-action-btn:hover { transform: none; }
+        .file-viewer-header { background: var(--panel-soft); border-bottom: 1px solid var(--line); padding: 18px 24px; }
+        .file-viewer-title { font-size: 16px; min-width: 0; }
+        #file-viewer-filename { overflow-wrap: anywhere; }
+        .file-viewer-close { color: var(--muted); background: transparent; border-color: var(--line); flex-shrink: 0; }
+        .file-viewer-close:hover { color: var(--ink); background: #283a32; transform: none; }
+        .file-content { font-size: 13px; line-height: 1.8; }
+        .search-info { background: var(--accent-soft); color: var(--ink); border-left: 3px solid var(--accent); font-size: 12px; }
+        .highlight { background: #a6edd5; color: #10271e; box-shadow: none; padding: 2px 3px; }
+        ::-webkit-scrollbar { width: 7px; height: 7px; }
+        ::-webkit-scrollbar-thumb { background: #354c40; border: 0; }
+        @media (max-width: 1024px) {
+            .sidebar { width: 240px; }
+            .chat-actions { opacity: 1; }
+            .chat-item { gap: 6px; padding: 9px 8px; }
+        }
+        @media (max-width: 768px) {
+            body { overflow: hidden; }
+            .container { padding: 8px; gap: 8px; height: 100dvh; min-height: 0; }
+            .sidebar { width: 100%; max-height: 192px; border: 1px solid var(--line); border-radius: 12px; }
+            .sidebar-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px; border-bottom: 0; }
+            .workspace-brand { margin: 0; gap: 8px; }
+            .brand-caption, .sidebar-section-label, .sidebar-footer { display: none; }
+            .brand-name { font-size: 15px; white-space: nowrap; }
+            .brand-mark { width: 34px; height: 34px; --icon-size: 19px; }
+            .new-chat-btn { width: auto; min-height: 44px; padding: 10px 13px; font-size: 12px; gap: 6px; }
+            .chats-list { flex: 0 1 auto; padding: 0 10px 10px; }
+            .chat-item { min-width: 230px; max-width: 260px; margin: 0; }
+            .chat-action-btn { width: 34px; height: 44px; }
+            .list-empty { padding: 2px 2px 0; text-align: left; font-size: 11px; }
+            .main-content { min-height: 0; border-radius: 12px; }
+            .chat-header { min-height: 68px; padding: 12px 14px; }
+            .chat-header h1 { font-size: 15px; }
+            .header-mark { display: none; }
+            .rename-btn, .file-tag-remove, .file-viewer-close { min-width: 44px; height: 44px; }
+            .messages-container { padding: 20px 14px; }
+            .empty-state { margin: 12px auto; padding: 12px 0; }
+            .empty-state h2 { font-size: 31px; letter-spacing: -1px; }
+            .empty-state-mark { width: 56px; height: 56px; margin-bottom: 20px; --icon-size: 26px; }
+            .empty-state p { font-size: 13px; }
+            .welcome-steps { gap: 6px; margin-top: 20px; }
+            .welcome-step { padding: 8px 10px; }
+            .input-area { padding: 12px; }
+            .file-input-label { min-height: 44px; }
+            .question-input { font-size: 16px; min-height: 72px; padding: 12px; }
+            .composer-hint { font-size: 10px; }
+            .message-content { padding: 14px; font-size: 14px; }
+            .source-excerpt { max-width: 100%; }
+            .file-viewer-body { padding: 18px; }
+            .edit-mode { flex-direction: column; }
+            .edit-actions { flex-direction: row; }
+        }
+        /* Workflow feedback stays in the workspace, without blocking browser alerts. */
+        [hidden] { display: none !important; }
+        .skip-link { position: fixed; z-index: 3000; top: 8px; left: 12px; transform: translateY(-160%); background: var(--accent); color: #10271e; padding: 12px 18px; border-radius: 8px; }
+        .skip-link:focus { transform: none; }
+        button:disabled { opacity: .45; cursor: not-allowed; transform: none; }
+        .main-content { position: relative; }
+        .workspace-notice { display: flex; align-items: center; gap: 12px; padding: 12px 20px; background: #1c3027; border-bottom: 1px solid #3c6350; flex-shrink: 0; font-size: 13px; line-height: 1.5; }
+        .workspace-notice[data-kind="error"] { background: #32221e; border-color: #785140; }
+        #notice-message { flex: 1; min-width: 0; overflow-wrap: anywhere; }
+        .notice-action { background: transparent; border: 1px solid var(--line-hover); border-radius: 8px; color: var(--ink); padding: 7px 10px; min-height: 36px; cursor: pointer; white-space: nowrap; }
+        .notice-dismiss { width: 36px; height: 36px; padding: 8px; flex-shrink: 0; color: var(--muted); border: 0; background: transparent; cursor: pointer; }
+        .chat-search { margin: 14px 14px 0; display: flex; align-items: center; gap: 8px; border: 1px solid var(--line); border-radius: 9px; padding: 0 10px; color: var(--muted); }
+        .chat-search:focus-within { border-color: var(--accent); }
+        .chat-search input { min-width: 0; width: 100%; padding: 10px 0; min-height: 40px; background: transparent; border: 0; color: var(--ink); font-size: 12px; outline: none; }
+        .sidebar-section-label { display: flex; justify-content: space-between; padding-top: 16px; }
+        .chat-item { gap: 2px; padding: 0 6px 0 0; }
+        .chat-select { display: flex; flex: 1; align-items: center; gap: 9px; text-align: left; min-width: 0; min-height: 62px; padding: 10px; border: 0; background: transparent; color: var(--ink); cursor: pointer; border-radius: 9px; }
+        .chat-select > [data-lucide] { color: var(--muted); }
+        .chat-select .chat-title, .chat-select .chat-date { display: block; }
+        .chat-actions { opacity: 1; }
+        .chat-select[aria-pressed="true"] > [data-lucide] { color: var(--accent); }
+        .welcome-cta { display: inline-flex; width: auto; margin-top: 26px; padding: 12px 22px; }
+        .prompt-suggestions { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-top: 24px; }
+        .prompt-chip { padding: 11px 14px; min-height: 44px; border: 1px solid #426554; background: var(--panel-soft); color: var(--ink); border-radius: 10px; cursor: pointer; font-size: 12px; text-align: left; }
+        .prompt-chip:hover { background: var(--accent-soft); border-color: var(--accent); }
+        .upload-guidance { color: var(--muted); font-size: 11px; line-height: 1.6; margin-top: 8px; }
+        .upload-status { color: var(--accent); font-size: 12px; line-height: 1.5; overflow-wrap: anywhere; }
+        .upload-status:not(:empty) { margin-top: 8px; }
+        .input-area:has(.file-input:disabled) .file-input-label { opacity: .5; cursor: not-allowed; }
+        .answer-text, .question-text { white-space: pre-wrap; overflow-wrap: anywhere; }
+        .answer-text + .message-action-btn { margin-top: 14px; }
+        .answer-status { display: flex; gap: 12px; align-items: flex-start; }
+        .answer-status p { color: var(--muted); font-size: 12px; line-height: 1.65; margin-top: 5px; }
+        .answer-status > [data-lucide] { margin-top: 4px; color: var(--accent); }
+        .answer-status [data-lucide="loader-circle"] { animation: loading-spin 1s linear infinite; }
+        @keyframes loading-spin { to { transform: rotate(360deg); } }
+        .message, .sources-section, .file-tag { animation: none; }
+        dialog.modal, dialog.file-viewer-modal { inset: 0; margin: 0; max-width: none; max-height: none; border: 0; padding: 16px; color: var(--ink); }
+        dialog[open].modal, dialog[open].file-viewer-modal { display: flex; }
+        dialog::backdrop { background: #0008; }
+        .dialog-description { font-size: 14px; line-height: 1.7; color: var(--muted); margin: -8px 0 24px; overflow-wrap: anywhere; }
+        .dialog-error { color: #ffc0a9; font-size: 13px; margin-bottom: 16px; }
+        .danger-btn { background: #603b32; color: #ffe0d5; border: 1px solid #a76b57; }
+        .download-link { color: var(--accent); text-decoration: underline; }
+        .drop-overlay { display: none; position: absolute; inset: 12px; z-index: 10; pointer-events: none; align-items: center; justify-content: center; border: 2px dashed var(--accent); background: #10271ef2; border-radius: 12px; color: var(--accent); font-size: 20px; }
+        .is-dragging .drop-overlay { display: flex; }
+        @media (max-width: 768px) {
+            .sidebar { max-height: 238px; }
+            .chat-search { margin: 0 12px 8px; }
+            .chat-search input { min-height: 34px; padding: 6px 0; }
+            .sidebar-section-label { display: none; }
+            .chat-select { min-height: 58px; }
+            .workspace-notice { padding: 10px 12px; gap: 6px; font-size: 12px; flex-wrap: wrap; }
+            .notice-action, .notice-dismiss { min-height: 44px; }
+            .upload-guidance { font-size: 10px; }
+            .welcome-cta { font-size: 13px; }
+            .modal-actions { gap: 8px; flex-wrap: wrap; }
+            .modal-btn { min-height: 44px; }
+            .empty-state h2 { font-size: 26px; }
+        }
         @media (prefers-reduced-motion: reduce) {
-            *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
+            *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
         }
     </style>
 </head>
 <body>
+    <a class="skip-link" href="#main-content">Skip to conversation</a>
     <div class="container">
         <div class="sidebar">
             <div class="sidebar-header">
+                <div class="workspace-brand">
+                    <span class="brand-mark"><i data-lucide="notebook-tabs"></i></span>
+                    <div><div class="brand-name">Doc Q&A</div><div class="brand-caption">Make room for clarity.</div></div>
+                </div>
                 <button class="new-chat-btn" onclick="createNewChat()"><i data-lucide="plus"></i> New Chat</button>
             </div>
+            <label class="chat-search"><i data-lucide="search"></i><input id="chat-search" type="search" placeholder="Find a conversation…" aria-label="Search conversations" autocomplete="off"></label>
+            <div class="sidebar-section-label">Your conversations <span id="chat-count">0</span></div>
             <div class="chats-list" id="chats-list"></div>
+            <div class="sidebar-footer"><i data-lucide="book-open"></i> A workspace for your documents</div>
         </div>
 
-        <div class="main-content">
+        <main class="main-content" id="main-content" tabindex="-1">
+            <div class="drop-overlay" aria-hidden="true">Drop documents to add them</div>
             <div class="chat-header">
                 <div class="chat-header-left">
-                    <h1 id="chat-title">Select or create a chat</h1>
-                    <button class="rename-btn" id="rename-btn" onclick="openRenameModal()" style="display: none;" title="Rename chat"><i data-lucide="pencil"></i></button>
+                    <span class="header-mark"><i data-lucide="messages-square"></i></span>
+                    <div class="header-titles"><div class="header-eyebrow">Document workspace</div><h1 id="chat-title">Your next discovery starts here</h1></div>
+                    <button class="rename-btn" id="rename-btn" onclick="openRenameModal()" style="display: none;" title="Rename chat" aria-label="Rename chat"><i data-lucide="square-pen"></i></button>
                 </div>
             </div>
 
+            <div class="workspace-notice" id="workspace-notice" role="status" aria-live="polite" hidden>
+                <span id="notice-message"></span><button class="notice-action" id="notice-action" hidden>Try again</button>
+                <button class="notice-dismiss" id="notice-dismiss" aria-label="Dismiss notification"><i data-lucide="x"></i></button>
+            </div>
             <div class="messages-container" id="messages-container">
                 <div class="empty-state">
-                    <h2>Welcome to Doc Q&A</h2>
-                    <p>Create a new chat or select an existing one to get started</p>
+                    <span class="empty-state-mark"><i data-lucide="scan-text"></i></span>
+                    <h2>Your documents.<br><span>Clear answers.</span></h2>
+                    <p>Start a conversation with your files. Find the details, connect the dots, and follow the sources.</p>
+                    <button class="new-chat-btn welcome-cta" data-new-chat onclick="createNewChat()"><i data-lucide="plus"></i> Start a conversation</button>
+                    <div class="welcome-steps">
+                        <span class="welcome-step"><i data-lucide="file-up"></i> Add documents</span>
+                        <span class="welcome-step"><i data-lucide="messages-square"></i> Ask a question</span>
+                        <span class="welcome-step"><i data-lucide="book-open"></i> Explore sources</span>
+                    </div>
                 </div>
             </div>
 
             <div class="input-area" id="input-area" style="display: none;">
                 <div class="file-upload-area">
                     <div class="file-input-wrapper">
-                        <label class="file-input-label" for="file-input"><i data-lucide="paperclip"></i> Upload File</label>
-                        <input type="file" id="file-input" class="file-input" onchange="uploadFile()">
+                        <label class="file-input-label" for="file-input"><i data-lucide="file-up"></i> Add document</label>
+                        <input type="file" id="file-input" class="file-input" accept=".pdf,.docx,.txt,.csv,.xlsx,.png,.jpg,.jpeg,.tiff,.bmp" multiple aria-describedby="upload-guidance" onchange="uploadFile()">
                     </div>
+                    <p class="upload-guidance" id="upload-guidance">PDF, Word, text, spreadsheets, or images · Up to 20 MB each · Drag & drop supported</p>
+                    <div class="upload-status" id="upload-status" role="status" aria-live="polite"></div>
                     <div class="uploaded-files" id="uploaded-files"></div>
                 </div>
 
                 <div class="input-wrapper">
-                    <textarea id="question-input" class="question-input" rows="3" placeholder="Ask a question about your documents..." onkeydown="handleKeyPress(event)"></textarea>
-                    <button class="send-btn" onclick="askQuestion()"><i data-lucide="send"></i> Send</button>
+                    <textarea id="question-input" class="question-input" rows="2" aria-label="Question about your documents" aria-describedby="composer-help" placeholder="What would you like to know?" onkeydown="handleKeyPress(event)"></textarea>
+                    <button class="send-btn" id="send-question" onclick="askQuestion()" title="Send question" aria-label="Send question" disabled><i data-lucide="arrow-up"></i></button>
                 </div>
+                <div class="composer-hint" id="composer-help">Add a document to get started.</div>
             </div>
-        </div>
+        </main>
     </div>
 
-    <div class="modal" id="rename-modal" onclick="if(event.target === this) closeRenameModal()">
+    <dialog class="modal" id="rename-modal" aria-labelledby="rename-title" onclick="if(event.target === this) closeRenameModal()">
         <div class="modal-content">
-            <div class="modal-header">Rename Chat</div>
-            <input type="text" id="rename-input" class="modal-input" placeholder="Enter chat name..." maxlength="100">
+            <div class="modal-header" id="rename-title">Rename Chat</div>
+            <input type="text" id="rename-input" class="modal-input" aria-label="Chat name" placeholder="Enter chat name..." maxlength="100">
+            <p class="dialog-error" id="rename-error" role="alert"></p>
             <div class="modal-actions">
                 <button class="modal-btn modal-btn-cancel" onclick="closeRenameModal()">Cancel</button>
-                <button class="modal-btn modal-btn-save" onclick="saveChatTitle()">Save</button>
+                <button class="modal-btn modal-btn-save" id="rename-save" onclick="saveChatTitle()"><i data-lucide="check"></i> Save</button>
             </div>
         </div>
-    </div>
+    </dialog>
 
-    <div class="file-viewer-modal" id="file-viewer-modal" onclick="if(event.target === this) closeFileViewer()">
+    <dialog class="modal" id="confirm-dialog" aria-labelledby="confirm-title" aria-describedby="confirm-description">
+        <div class="modal-content">
+            <div class="modal-header" id="confirm-title">Confirm action</div>
+            <p class="dialog-description" id="confirm-description"></p>
+            <div class="modal-actions"><button class="modal-btn modal-btn-cancel" id="confirm-cancel">Keep it</button><button class="modal-btn danger-btn" id="confirm-accept">Delete</button></div>
+        </div>
+    </dialog>
+
+    <dialog class="file-viewer-modal" id="file-viewer-modal" aria-labelledby="file-viewer-filename" onclick="if(event.target === this) closeFileViewer()">
         <div class="file-viewer-content">
             <div class="file-viewer-header">
                 <div class="file-viewer-title">
-                    <span>📄</span>
+                    <i data-lucide="file-text"></i>
                     <span id="file-viewer-filename">Document</span>
                 </div>
-                <button class="file-viewer-close" onclick="closeFileViewer()">✕</button>
+                <button class="file-viewer-close" onclick="closeFileViewer()" aria-label="Close document"><i data-lucide="x"></i></button>
             </div>
             <div class="file-viewer-body">
                 <div class="search-info" id="search-info"></div>
                 <div class="file-content" id="file-content"></div>
             </div>
         </div>
-    </div>
+    </dialog>
 
-    <script>
-        let currentChatId = null;
-        let pollingInterval = null;
-
-        window.addEventListener('DOMContentLoaded', loadChats);
-
-        async function loadChats() {
-            try {
-                const response = await fetch('/api/chats');
-                const chats = await response.json();
-                renderChats(chats);
-            } catch (error) {
-                console.error('Error loading chats:', error);
-            }
-        }
-
-        function renderChats(chats) {
-            const chatsList = document.getElementById('chats-list');
-
-            if (chats.length === 0) {
-                chatsList.innerHTML = '<div style="padding: 20px; text-align: center; opacity: 0.5; font-size: 13px;">No chats yet</div>';
-                return;
-            }
-
-            chatsList.innerHTML = chats.map(chat => `
-                <div class="chat-item ${chat.id === currentChatId ? 'active' : ''}" onclick="selectChat(${chat.id})">
-                    <div class="chat-info">
-                        <div class="chat-title">${escapeHtml(chat.title || 'New Chat')}</div>
-                        <div class="chat-date">${formatDate(chat.updated_at)}</div>
-                    </div>
-                    <div class="chat-actions">
-                        <button class="chat-action-btn" onclick="event.stopPropagation(); openRenameModalForChat(${chat.id}, '${escapeHtml(chat.title)}')" title="Rename">✏️</button>
-                        <button class="chat-action-btn" onclick="event.stopPropagation(); deleteChat(${chat.id})" title="Delete">🗑️</button>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        async function createNewChat() {
-            try {
-                const response = await fetch('/api/chats', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-                    },
-                    body: JSON.stringify({ title: 'New Chat' })
-                });
-                const chat = await response.json();
-                await loadChats();
-                selectChat(chat.chat_id);
-            } catch (error) {
-                console.error('Error creating chat:', error);
-            }
-        }
-
-        async function selectChat(chatId) {
-            currentChatId = chatId;
-
-            try {
-                const response = await fetch(`/api/chats/${chatId}`);
-                const chat = await response.json();
-
-                document.getElementById('chat-title').textContent = chat.title || 'Chat';
-                document.getElementById('rename-btn').style.display = 'block';
-                document.getElementById('input-area').style.display = 'block';
-
-                renderMessages(chat.messages);
-                renderUploadedFiles(chat.files);
-                await loadChats();
-            } catch (error) {
-                console.error('Error loading chat:', error);
-            }
-        }
-
-        function renderMessages(messages) {
-            const container = document.getElementById('messages-container');
-
-            if (messages.length === 0) {
-                container.innerHTML = '<div class="empty-state"><h2>No messages yet</h2><p>Ask a question to get started</p></div>';
-                return;
-            }
-
-            container.innerHTML = messages.map(msg => {
-                let answerHtml = '';
-
-                if (msg.answer) {
-                    let cleanAnswer = msg.answer.replace(/\s*\[.*?\]\s*/g, ' ').replace(/\s+/g, ' ').trim();
-                    let paragraphs = cleanAnswer.split(/\n\n+/);
-                    let formattedAnswer = paragraphs.map(p => `<p>${p.replace(/\n/g, '<br>')}</p>`).join('');
-
-                    answerHtml = `
-                        <div class="message">
-                            <div class="message-label">Assistant</div>
-                            <div class="message-content answer">
-                                ${formattedAnswer}
-                                ${msg.citations && msg.citations.length > 0 ? `
-                                    <div class="sources-section">
-                                        <div class="sources-title">📚 Sources</div>
-                                        <div>
-                                            ${msg.citations.map(c => `
-                                                <span class="source-item" onclick="openFileViewer('${escapeHtml(typeof c === 'string' ? c : c.filename)}', ${msg.id})" title="Click to view document">
-                                                    <span class="source-icon">📄</span>
-                                                    <span>
-                                                        <strong>${escapeHtml(typeof c === 'string' ? c : `${c.filename} · chunk ${c.chunk_index + 1}`)}</strong>
-                                                        ${typeof c === 'string' || !c.excerpt ? '' : `<small class="source-excerpt">${escapeHtml(c.excerpt)}</small>`}
-                                                    </span>
-                                                </span>
-                                            `).join('')}
-                                        </div>
-                                    </div>
-                                ` : ''}
-                            </div>
-                        </div>
-                    `;
-                } else {
-                    answerHtml = '<div class="message"><div class="message-content answer loading">Processing your question...</div></div>';
-                }
-
-                return `
-                    <div class="message" id="message-${msg.id}">
-                        <div class="message-label">You</div>
-                        <div class="message-content question">
-                            <div class="question-text" id="question-text-${msg.id}">${escapeHtml(msg.question)}</div>
-                            <div class="message-actions">
-                                <button class="message-action-btn" onclick="editMessage(${msg.id}, '${escapeHtml(msg.question).replace(/'/g, "\\'")}')">✏️ Edit</button>
-                            </div>
-                        </div>
-                    </div>
-                    ${answerHtml}
-                `;
-            }).join('');
-
-            container.scrollTop = container.scrollHeight;
-        }
-
-        function renderUploadedFiles(files) {
-            const container = document.getElementById('uploaded-files');
-            container.innerHTML = files.map(f => `
-                <div class="file-tag">
-                    📄 ${escapeHtml(f.original_name)}
-                    <button class="file-tag-remove" onclick="deleteFile(${f.id})" title="Remove file">✕</button>
-                </div>
-            `).join('');
-        }
-
-        async function uploadFile() {
-            if (!currentChatId) {
-                alert('Please select a chat first');
-                return;
-            }
-
-            const fileInput = document.getElementById('file-input');
-            const file = fileInput.files[0];
-            if (!file) return;
-
-            const formData = new FormData();
-            formData.append('file', file);
-
-            try {
-                const response = await fetch(`/api/chats/${currentChatId}/upload`, {
-                    method: 'POST',
-                    headers: { 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content },
-                    body: formData
-                });
-
-                if (response.ok) {
-                    fileInput.value = '';
-                    selectChat(currentChatId);
-                } else {
-                    alert('Error uploading file');
-                }
-            } catch (error) {
-                console.error('Error uploading file:', error);
-                alert('Error uploading file');
-            }
-        }
-
-        async function askQuestion() {
-            if (!currentChatId) {
-                alert('Please select a chat first');
-                return;
-            }
-
-            const questionInput = document.getElementById('question-input');
-            const question = questionInput.value.trim();
-
-            if (!question) {
-                alert('Please enter a question');
-                return;
-            }
-
-            questionInput.value = '';
-            questionInput.disabled = true;
-
-            try {
-                const response = await fetch(`/api/chats/${currentChatId}/ask`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-                    },
-                    body: JSON.stringify({ question })
-                });
-
-                const data = await response.json();
-
-                if (data.query_id) {
-                    await selectChat(currentChatId);
-                    pollForAnswer(data.query_id);
-                } else {
-                    alert('Error: ' + (data.error || 'Unknown error'));
-                    questionInput.disabled = false;
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                alert('An error occurred during submission.');
-                questionInput.disabled = false;
-            }
-        }
-
-        function pollForAnswer(queryId) {
-            if (pollingInterval) clearInterval(pollingInterval);
-
-            pollingInterval = setInterval(async () => {
-                try {
-                    const response = await fetch(`/api/check-status?query_id=${queryId}`);
-                    const data = await response.json();
-
-                    if (data.status === 'error') {
-                        clearInterval(pollingInterval);
-                        pollingInterval = null;
-                        alert('Error: ' + data.details);
-                        document.getElementById('question-input').disabled = false;
-                        await selectChat(currentChatId);
-                    } else if (data.status === 'completed') {
-                        clearInterval(pollingInterval);
-                        pollingInterval = null;
-                        document.getElementById('question-input').disabled = false;
-                        await selectChat(currentChatId);
-                    }
-                } catch (error) {
-                    clearInterval(pollingInterval);
-                    pollingInterval = null;
-                    console.error('Polling error:', error);
-                    document.getElementById('question-input').disabled = false;
-                }
-            }, 3000);
-        }
-
-        async function deleteChat(chatId) {
-            if (!confirm('Are you sure you want to delete this chat?')) return;
-
-            try {
-                const response = await fetch(`/api/chats/${chatId}`, {
-                    method: 'DELETE',
-                    headers: { 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content }
-                });
-
-                if (response.ok) {
-                    if (currentChatId === chatId) {
-                        currentChatId = null;
-                        document.getElementById('chat-title').textContent = 'Select or create a chat';
-                        document.getElementById('rename-btn').style.display = 'none';
-                        document.getElementById('input-area').style.display = 'none';
-                        document.getElementById('messages-container').innerHTML = '<div class="empty-state"><h2>Welcome to Doc Q&A</h2><p>Create a new chat or select an existing one to get started</p></div>';
-                    }
-                    await loadChats();
-                } else {
-                    alert('Error deleting chat');
-                }
-            } catch (error) {
-                console.error('Error deleting chat:', error);
-                alert('Error deleting chat');
-            }
-        }
-
-        function openRenameModal() {
-            if (!currentChatId) return;
-            const currentTitle = document.getElementById('chat-title').textContent;
-            document.getElementById('rename-input').value = currentTitle;
-            document.getElementById('rename-modal').classList.add('active');
-            document.getElementById('rename-input').focus();
-        }
-
-        function openRenameModalForChat(chatId, title) {
-            selectChat(chatId);
-            setTimeout(() => {
-                document.getElementById('rename-input').value = title;
-                document.getElementById('rename-modal').classList.add('active');
-                document.getElementById('rename-input').focus();
-            }, 100);
-        }
-
-        function closeRenameModal() {
-            document.getElementById('rename-modal').classList.remove('active');
-            document.getElementById('rename-input').value = '';
-        }
-
-        async function saveChatTitle() {
-            if (!currentChatId) return;
-            const newTitle = document.getElementById('rename-input').value.trim();
-
-            if (!newTitle) {
-                alert('Please enter a chat name');
-                return;
-            }
-
-            try {
-                const response = await fetch(`/api/chats/${currentChatId}/title`, {
-                    method: 'PATCH',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-                    },
-                    body: JSON.stringify({ title: newTitle })
-                });
-
-                if (response.ok) {
-                    document.getElementById('chat-title').textContent = newTitle;
-                    closeRenameModal();
-                    await loadChats();
-                } else {
-                    alert('Error updating chat title');
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                alert('Error updating chat title');
-            }
-        }
-
-        function escapeHtml(text) {
-            const div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML;
-        }
-
-        function handleKeyPress(event) {
-            if (event.key === 'Enter' && !event.shiftKey) {
-                event.preventDefault();
-                askQuestion();
-            }
-        }
-
-        function formatDate(dateString) {
-            const date = new Date(dateString);
-            const now = new Date();
-            const diffMs = now - date;
-            const diffMins = Math.floor(diffMs / 60000);
-            const diffHours = Math.floor(diffMs / 3600000);
-            const diffDays = Math.floor(diffMs / 86400000);
-
-            if (diffMins < 1) return 'Just now';
-            if (diffMins < 60) return `${diffMins}m ago`;
-            if (diffHours < 24) return `${diffHours}h ago`;
-            if (diffDays < 7) return `${diffDays}d ago`;
-            return date.toLocaleDateString();
-        }
-
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') closeRenameModal();
-        });
-
-        document.getElementById('rename-input').addEventListener('keydown', function(e) {
-            if (e.key === 'Enter') saveChatTitle();
-        });
-
-        async function deleteFile(fileId) {
-            if (!currentChatId || !confirm('Are you sure you want to delete this file?')) return;
-
-            try {
-                const response = await fetch(`/api/chats/${currentChatId}/files/${fileId}`, {
-                    method: 'DELETE',
-                    headers: { 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content }
-                });
-
-                if (response.ok) {
-                    await selectChat(currentChatId);
-                } else {
-                    alert('Error deleting file');
-                }
-            } catch (error) {
-                console.error('Error deleting file:', error);
-                alert('Error deleting file');
-            }
-        }
-
-        function editMessage(messageId, currentQuestion) {
-            const questionTextEl = document.getElementById(`question-text-${messageId}`);
-            const editHtml = `
-                <div class="edit-mode">
-                    <textarea class="edit-input" id="edit-input-${messageId}">${currentQuestion}</textarea>
-                    <div class="edit-actions">
-                        <button class="edit-btn edit-btn-save" onclick="saveEditedMessage(${messageId})">Save</button>
-                        <button class="edit-btn edit-btn-cancel" onclick="cancelEditMessage(${messageId}, '${currentQuestion.replace(/'/g, "\\'")}')">Cancel</button>
-                    </div>
-                </div>
-            `;
-            questionTextEl.parentElement.innerHTML = editHtml;
-            document.getElementById(`edit-input-${messageId}`).focus();
-        }
-
-        function cancelEditMessage(messageId, originalQuestion) {
-            const messageEl = document.getElementById(`message-${messageId}`);
-            const questionContent = messageEl.querySelector('.question');
-            questionContent.innerHTML = `
-                <div class="question-text" id="question-text-${messageId}">${escapeHtml(originalQuestion)}</div>
-                <div class="message-actions">
-                    <button class="message-action-btn" onclick="editMessage(${messageId}, '${originalQuestion.replace(/'/g, "\\'")}')">✏️ Edit</button>
-                </div>
-            `;
-        }
-
-        async function saveEditedMessage(messageId) {
-            if (!currentChatId) return;
-            const editedQuestion = document.getElementById(`edit-input-${messageId}`).value.trim();
-
-            if (!editedQuestion) {
-                alert('Question cannot be empty');
-                return;
-            }
-
-            try {
-                const response = await fetch(`/api/chats/${currentChatId}/messages/${messageId}`, {
-                    method: 'PATCH',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-                    },
-                    body: JSON.stringify({ question: editedQuestion })
-                });
-
-                const data = await response.json();
-                if (data.query_id) {
-                    await selectChat(currentChatId);
-                    pollForAnswer(data.query_id);
-                } else {
-                    alert('Error updating message');
-                }
-            } catch (error) {
-                console.error('Error updating message:', error);
-                alert('Error updating message');
-            }
-        }
-
-        async function openFileViewer(filename, messageId) {
-            if (!currentChatId) return;
-
-            try {
-                const response = await fetch(`/api/chats/${currentChatId}/files/content?filename=${encodeURIComponent(filename)}`);
-                if (!response.ok) {
-                    alert('Error loading file');
-                    return;
-                }
-
-                const data = await response.json();
-                if (data.previewable === false) {
-                    window.open(data.download_url, '_blank', 'noopener,noreferrer');
-                    return;
-                }
-                const chatResponse = await fetch(`/api/chats/${currentChatId}`);
-                const chat = await chatResponse.json();
-                const message = chat.messages.find(m => m.id === messageId);
-
-                document.getElementById('file-viewer-filename').textContent = filename;
-                document.getElementById('file-viewer-modal').classList.add('active');
-                displayFileContent(data.content, message ? message.answer : '');
-            } catch (error) {
-                console.error('Error opening file:', error);
-                alert('Error loading file');
-            }
-        }
-
-        function displayFileContent(content, answerText) {
-            const fileContentEl = document.getElementById('file-content');
-            const searchInfoEl = document.getElementById('search-info');
-
-            // Escape uploaded content before inserting highlighting markup.
-            const escapedContent = String(content)
-                .replace(/&/g, '&amp;')
-                .replace(/</g, '&lt;')
-                .replace(/>/g, '&gt;')
-                .replace(/"/g, '&quot;')
-                .replace(/'/g, '&#039;');
-
-            const words = answerText.toLowerCase().replace(/[^\w\s]/g, ' ').split(/\s+/).filter(w => w.length >= 4);
-            const uniqueWords = [...new Set(words)];
-
-            let highlightedContent = escapedContent;
-            let highlightCount = 0;
-
-            uniqueWords.forEach(word => {
-                const regex = new RegExp(`\\b(${word}\\w*)\\b`, 'gi');
-                const matches = escapedContent.match(regex);
-                if (matches && matches.length > 0) {
-                    highlightCount += matches.length;
-                    highlightedContent = highlightedContent.replace(regex, '<span class="highlight">$1</span>');
-                }
-            });
-
-            if (highlightCount > 0) {
-                searchInfoEl.textContent = `Found ${highlightCount} highlighted term${highlightCount > 1 ? 's' : ''} related to the answer`;
-                searchInfoEl.style.display = 'block';
-            } else {
-                searchInfoEl.style.display = 'none';
-            }
-
-            fileContentEl.innerHTML = highlightedContent;
-        }
-
-        function closeFileViewer() {
-            document.getElementById('file-viewer-modal').classList.remove('active');
-            document.getElementById('file-content').innerHTML = '';
-        }
-    </script>
 </body>
 </html>

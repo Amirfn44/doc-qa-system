@@ -1,7 +1,8 @@
 from langchain_ollama.llms import OllamaLLM
 from langchain_core.prompts import ChatPromptTemplate
+from src.llm.config import CHAT_MODEL
 
-model = OllamaLLM(model="llama3.2")
+model = OllamaLLM(model=CHAT_MODEL)
 
 template = """
 You are an expert AI reviewer.

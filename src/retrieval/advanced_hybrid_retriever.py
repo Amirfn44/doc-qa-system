@@ -1,7 +1,6 @@
 import os
 
 from langchain_community.retrievers import BM25Retriever
-from langchain.retrievers import EnsembleRetriever
 from langchain_cohere import CohereRerank
 from src.utils.rate_limiter import COHERE_LIMITER
 from langchain_core.documents import Document

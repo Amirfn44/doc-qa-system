@@ -201,6 +201,10 @@ class QaController extends Controller
         $message = ChatMessage::where('chat_id', $chatId)->findOrFail($messageId);
         $this->authorizeChat($message->chat);
 
+        if (!$message->chat->files()->exists()) {
+            return response()->json(['error' => 'Upload at least one document to this chat before asking a question.'], 422);
+        }
+
         $message->update([
             'question' => $request->input('question'),
             'answer' => null,
@@ -322,6 +326,10 @@ class QaController extends Controller
         $chat = Chat::findOrFail($chatId);
         $this->authorizeChat($chat);
 
+        if (!$chat->files()->exists()) {
+            return response()->json(['error' => 'Upload at least one document to this chat before asking a question.'], 422);
+        }
+
         $message = ChatMessage::create([
             'chat_id' => $chatId,
             'question' => $question
@@ -350,7 +358,8 @@ class QaController extends Controller
             return response()->json(['error' => 'No query ID provided'], 400);
         }
 
-        $result = Cache::pull($queryId);
+        // Keep the result until its TTL expires so reconnecting tabs can recover it.
+        $result = Cache::get($queryId);
 
         if ($result) {
             return response()->json(json_decode($result, true));

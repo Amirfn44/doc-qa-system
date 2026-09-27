@@ -3,12 +3,12 @@ import sys
 import json
 from dotenv import load_dotenv
 
+load_dotenv()
+
 from src.ingestion.processor import process_file
 from src.vectorstore.store import build_vector_store
 from src.retrieval.advanced_hybrid_retriever import AdvancedHybridRetriever
 from src.graph.workflow import create_workflow
-
-load_dotenv()
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:

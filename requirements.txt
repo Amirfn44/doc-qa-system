@@ -1,4 +1,7 @@
 langchain
+langchain-text-splitters
+langchain-community
+langchain-classic
 langchain-ollama
 langchain-chroma
 rank_bm25
@@ -8,3 +11,7 @@ python-dotenv
 langgraph
 pandas
 openpyxl
+PyMuPDF
+python-docx
+Pillow
+pytesseract
